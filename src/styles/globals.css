@@ -1,0 +1,108 @@
+@font-face {
+  font-family: 'CustomFont';
+  src: url('/fonts/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2')
+    format('woff2');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --background: var(--vapor-color-background-canvas-100);
+  --foreground: var(--vapor-color-foreground-normal-200);
+  --card: var(--vapor-color-white);
+  --card-foreground: var(--vapor-color-foreground-normal-200);
+  --popover: var(--vapor-color-background-overlay-100);
+  --popover-foreground: var(--vapor-color-foreground-normal-200);
+  --primary: var(--vapor-color-blue-500);
+  --primary-foreground: var(--vapor-color-foreground-inverse);
+  --secondary: var(--vapor-color-background-secondary-100);
+  --secondary-foreground: var(--vapor-color-foreground-secondary-200);
+  --accent: var(--vapor-color-background-primary-100);
+  --accent-foreground: var(--vapor-color-foreground-primary-200);
+  --muted: var(--vapor-color-background-secondary-100);
+  --muted-foreground: var(--vapor-color-foreground-hint-100);
+  --border: var(--vapor-color-border-normal);
+  --input: var(--vapor-color-white);
+  --input-foreground: var(--vapor-color-foreground-normal-200);
+  --input-border: var(--vapor-color-border-secondary);
+  --ring: var(--vapor-color-blue-300);
+  --destructive: var(--vapor-color-background-danger-200);
+  --destructive-foreground: var(--vapor-color-foreground-inverse);
+  --success: var(--vapor-color-background-success-200);
+  --success-foreground: var(--vapor-color-foreground-inverse);
+  --warning: var(--vapor-color-background-warning-200);
+  --warning-foreground: var(--vapor-color-foreground-inverse);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family:
+    'CustomFont',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    'Roboto',
+    'Arial',
+    'Noto Sans',
+    sans-serif,
+    'Apple Color Emoji',
+    'Segoe UI Emoji',
+    'Segoe UI Symbol',
+    'Noto Color Emoji';
+  color: var(--foreground);
+  background-color: var(--background);
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+input,
+textarea,
+select {
+  color: var(--input-foreground);
+  background-color: var(--input);
+  border: 1px solid var(--input-border);
+}
+
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+img,
+picture,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+ol,
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

@@ -1,0 +1,10 @@
+{
+  "version": 1,
+  "skills": {
+    "vapor-ui": {
+      "source": "goorm-dev/vapor-ui",
+      "sourceType": "github",
+      "computedHash": "064c02e9160e29417dfee86a54558bcc16e5e90ae3555462ac61c9d9831823e6"
+    }
+  }
+}
