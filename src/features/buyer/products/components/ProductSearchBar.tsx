@@ -1,5 +1,4 @@
 import { HStack, Box, Text } from '@vapor-ui/core';
-import { Icon } from '@iconify/react';
 import { SearchOutlineIcon } from '@vapor-ui/icons';
 
 interface ProductSearchBarProps {

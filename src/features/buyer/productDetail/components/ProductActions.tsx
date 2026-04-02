@@ -4,9 +4,14 @@ import { useState } from 'react';
 interface ProductActionsProps {
   onBuy?: () => void;
   onLike?: () => void;
+  isFarmer?: boolean;
 }
 
-export const ProductActions = ({ onBuy, onLike }: ProductActionsProps) => {
+export const ProductActions = ({
+  onBuy,
+  onLike,
+  isFarmer = false,
+}: ProductActionsProps) => {
   const [isLiked, setIsLiked] = useState(false);
 
   const handleLikeClick = () => {
@@ -44,7 +49,8 @@ export const ProductActions = ({ onBuy, onLike }: ProductActionsProps) => {
           (e.currentTarget as HTMLElement).style.backgroundColor = '#f5f5f5';
         }}
         onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.backgroundColor = 'transparent';
+          (e.currentTarget as HTMLElement).style.backgroundColor =
+            'transparent';
         }}
       >
         <Icon
@@ -72,14 +78,8 @@ export const ProductActions = ({ onBuy, onLike }: ProductActionsProps) => {
           cursor: 'pointer',
           transition: 'background-color 0.2s ease',
         }}
-        onMouseEnter={(e) => {
-          (e.currentTarget as HTMLElement).style.backgroundColor = '#E55A0F';
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLElement).style.backgroundColor = '#FF7628';
-        }}
       >
-        구매하기
+        {isFarmer ? '단골 등록하기' : '구매하기'}
       </button>
     </div>
   );

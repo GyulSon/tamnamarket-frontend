@@ -6,8 +6,10 @@ import { FarmerVoiceButton } from '../productDetail/components/FarmerVoiceButton
 import { ProductActions } from '../productDetail/components/ProductActions';
 import { PublishOutlineIcon } from '@vapor-ui/icons';
 import { FarmerCard } from '@/features/buyer/home/components';
+import { useRouter } from 'next/navigation';
 
 export const BuyerProductDetail = () => {
+  const router = useRouter();
   // Mock 데이터
   const mockProduct = {
     id: '1',
@@ -31,11 +33,6 @@ export const BuyerProductDetail = () => {
       percent: 87,
       totalSellCnt: 582,
     },
-  };
-
-  const handleBuy = () => {
-    console.log('구매 버튼 클릭');
-    // 구매 로직
   };
 
   const handleLike = () => {
@@ -218,7 +215,10 @@ export const BuyerProductDetail = () => {
           gap: '12px',
         }}
       >
-        <ProductActions onBuy={handleBuy} onLike={handleLike} />
+        <ProductActions
+          onBuy={() => router.push('/buyer/completed')}
+          onLike={handleLike}
+        />
       </div>
     </Box>
   );

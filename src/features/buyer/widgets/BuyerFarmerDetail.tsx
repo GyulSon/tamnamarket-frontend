@@ -222,7 +222,11 @@ export const BuyerFarmerDetail = () => {
           gap: '12px',
         }}
       >
-        <ProductActions onBuy={handleLike} onLike={handleLike} />
+        <ProductActions
+          isFarmer={true}
+      
+          onLike={handleLike}
+        />
       </div>
     </Box>
   );
