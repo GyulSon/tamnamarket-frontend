@@ -1,18 +1,27 @@
-import { Text, VStack } from '@vapor-ui/core';
+'use client';
 
+import { BottomNav } from '@/features/buyer/home/components';
+import { BuyerHome } from '@/features/buyer/widgets/BuyerHome';
+import { BuyerFarmers } from '@/features/buyer/widgets/BuyerFarmers';
+import { BuyerProducts } from '@/features/buyer/widgets/BuyerProducts';
+import { BuyerMyPage } from '@/features/buyer/widgets/BuyerMyPage';
+import { useState } from 'react';
+import { BottomNavTab } from '@/features/buyer/widgets/BottomNav';
 import SectionContainer from '@/components/SectionContainer';
 
+const SCREENS: Record<BottomNavTab, React.ReactNode> = {
+  home: <BuyerHome />,
+  farmers: <BuyerFarmers />,
+  products: <BuyerProducts />,
+  my: <BuyerMyPage />,
+};
+
 const BuyerPage = () => {
+  const [activeTab, setActiveTab] = useState<BottomNavTab>('home');
   return (
     <SectionContainer>
-      <VStack $css={{ gap: '$150' }}>
-        <Text render={<h1 />} typography="heading5">
-          구매자 페이지
-        </Text>
-        <Text typography="body2" $css={{ color: 'var(--muted-foreground)' }}>
-          구매자 페이지입니다.
-        </Text>
-      </VStack>
+      {SCREENS[activeTab]}
+      <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </SectionContainer>
   );
 };
