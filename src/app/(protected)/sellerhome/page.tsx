@@ -1,7 +1,7 @@
 import { SellerHome } from '@/features/seller/widgets/SellerHome';
 
-const SellerPage = () => {
+const SellerHomePage = () => {
   return <SellerHome />;
 };
 
-export default SellerPage;
+export default SellerHomePage;
