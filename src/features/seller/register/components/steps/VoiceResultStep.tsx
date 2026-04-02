@@ -2,7 +2,6 @@
 
 import { Icon } from '@iconify/react';
 import { Badge, Box, Button, HStack, Text, VStack } from '@vapor-ui/core';
-import { useMemo, useState } from 'react';
 
 type SaleDraft = {
   categoryLabel: string;
@@ -20,30 +19,12 @@ type VoiceResultStepProps = {
   onSubmit: () => void;
 };
 
-const formatManualPrice = (value: string) => {
-  if (!value) {
-    return '';
-  }
-
-  return `${Number(value).toLocaleString('ko-KR')}원`;
-};
-
 const VoiceResultStep = ({
   draft,
   previewUrl,
   onBack,
   onSubmit,
 }: VoiceResultStepProps) => {
-  const [isPriceEditorOpen, setIsPriceEditorOpen] = useState(false);
-  const [manualPrice, setManualPrice] = useState('');
-  const displayedPrice = useMemo(() => {
-    if (!manualPrice) {
-      return draft.recommendedPrice;
-    }
-
-    return formatManualPrice(manualPrice);
-  }, [draft.recommendedPrice, manualPrice]);
-
   return (
     <Box
       $css={{
@@ -146,20 +127,39 @@ const VoiceResultStep = ({
                   alignItems: 'stretch',
                 }}
               >
-                <Text
-                  typography="body4"
+                <Badge
+                  size="sm"
+                  shape="pill"
+                  colorPalette="hint"
                   $css={{
-                    color: '#7a7a7a',
-                    fontWeight: 600,
+                    display: 'inline-flex',
+                    width: 'fit-content',
+                    height: '20px',
+                    paddingLeft: '8px',
+                    paddingRight: '8px',
+                    borderRadius: '999px',
+                    backgroundColor: '#f3f4f6',
+                    alignItems: 'center',
+                    justifyContent: 'center',
                   }}
                 >
-                  {draft.categoryLabel}
-                </Text>
+                  <Text
+                    typography="body3"
+                    $css={{
+                      color: '#7a7a7a',
+                      fontWeight: 600,
+                      lineHeight: 1,
+                    }}
+                  >
+                    {draft.categoryLabel}
+                  </Text>
+                </Badge>
                 <Text
                   typography="heading5"
                   $css={{
                     color: '#111111',
                     fontWeight: 800,
+                    fontSize: '20px',
                     lineHeight: 1.35,
                     wordBreak: 'keep-all',
                   }}
@@ -174,68 +174,67 @@ const VoiceResultStep = ({
                 width: '100%',
                 alignItems: 'stretch',
                 minWidth: 0,
-                gap: '12px',
                 padding: '16px',
                 borderRadius: '14px',
                 border: '1px solid #eceff3',
                 backgroundColor: '#ffffff',
               }}
             >
-              <HStack
-                $css={{
-                  width: '100%',
-                  minWidth: 0,
-                  justifyContent: 'space-between',
-                  alignItems: 'flex-start',
-                  gap: '12px',
-                }}
-              >
-                <Text
-                  typography="body2"
+              <VStack $css={{ gap: '4px' }}>
+                <HStack
                   $css={{
-                    color: '#111111',
-                    fontWeight: 700,
+                    width: '100%',
                     minWidth: 0,
-                    flex: 1,
-                    lineHeight: 1.4,
-                    wordBreak: 'keep-all',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: '12px',
                   }}
                 >
-                  AI 특산품 가격 추천
-                </Text>
-                <Text
-                  typography="heading5"
-                  $css={{
-                    color: '#f68632',
-                    fontWeight: 800,
-                    flexShrink: 0,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {displayedPrice}
-                </Text>
-              </HStack>
+                  <Text
+                    typography="body2"
+                    $css={{
+                      color: '#111111',
+                      fontWeight: 700,
+                      fontSize: 'var(--vapor-typography-fontSize-100)',
+                      minWidth: 0,
+                      flex: 1,
+                      lineHeight: 1.4,
+                      wordBreak: 'keep-all',
+                    }}
+                  >
+                    AI 특산품 가격 추천
+                  </Text>
+                  <Text
+                    typography="heading5"
+                    $css={{
+                      color: '#f68632',
+                      fontWeight: 800,
+                      fontSize: 'var(--vapor-typography-fontSize-100)',
+                      lineHeight: 1.4,
+                      flexShrink: 0,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {draft.recommendedPrice}
+                  </Text>
+                </HStack>
 
-              <Text
-                typography="body4"
-                $css={{
-                  color: '#7a7a7a',
-                  lineHeight: 1.5,
-                }}
-              >
-                {draft.priceReason}
-              </Text>
+                <Text
+                  typography="body4"
+                  $css={{
+                    color: '#7a7a7a',
+                    fontSize: 'var(--vapor-typography-fontSize-050)',
+                    lineHeight: 1.5,
+                  }}
+                >
+                  {draft.priceReason}
+                </Text>
+              </VStack>
 
               <Button
                 colorPalette="primary"
-                onClick={() => {
-                  setIsPriceEditorOpen((previousState) => !previousState);
-
-                  if (isPriceEditorOpen) {
-                    setManualPrice('');
-                  }
-                }}
                 $css={{
+                  marginTop: '16px',
                   width: '100%',
                   height: '38px',
                   borderRadius: '12px',
@@ -243,54 +242,23 @@ const VoiceResultStep = ({
                   border: '1px solid #f5a067',
                   color: '#f68632',
                   fontWeight: 700,
+                  fontSize: 'var(--vapor-typography-fontSize-075)',
                 }}
               >
                 직접 입력하기
               </Button>
-
-              {isPriceEditorOpen ? (
-                <VStack $css={{ gap: '8px' }}>
-                  <input
-                    inputMode="numeric"
-                    placeholder="가격을 숫자로 입력해주세요"
-                    value={manualPrice}
-                    onChange={(event) => {
-                      const nextValue = event.target.value.replace(/\D/g, '');
-                      setManualPrice(nextValue);
-                    }}
-                    style={{
-                      width: '100%',
-                      height: '42px',
-                      borderRadius: '12px',
-                      border: '1px solid #d8dde3',
-                      padding: '0 14px',
-                      fontSize: '14px',
-                      color: '#111111',
-                      outline: 'none',
-                    }}
-                  />
-                  <Text
-                    typography="body4"
-                    $css={{
-                      color: '#7a7a7a',
-                    }}
-                  >
-                    입력한 가격은 화면에서만 바로 확인할 수 있어요.
-                  </Text>
-                </VStack>
-              ) : null}
             </VStack>
 
             <Box
               $css={{
-                borderTop: '1px solid #f0f0f0',
-                paddingTop: '16px',
+                paddingTop: '8px',
               }}
             >
               <Text
                 typography="body3"
                 $css={{
                   color: '#3f3f46',
+                  fontSize: 'var(--vapor-typography-fontSize-075)',
                   lineHeight: 1.7,
                   whiteSpace: 'pre-line',
                 }}
@@ -306,8 +274,8 @@ const VoiceResultStep = ({
                 justifyContent: 'space-between',
                 gap: '12px',
                 width: '100%',
-                paddingTop: '14px',
-                paddingBottom: '14px',
+                paddingTop: '8px',
+                paddingBottom: '8px',
                 paddingLeft: '16px',
                 paddingRight: '16px',
                 borderRadius: '999px',
@@ -345,15 +313,18 @@ const VoiceResultStep = ({
                 <Text
                   typography="body3"
                   $css={{
+                    display: 'flex',
+                    alignItems: 'center',
                     color: '#ffffff',
                     fontWeight: 700,
-                    lineHeight: 1.4,
+                    fontSize: 'var(--vapor-typography-fontSize-075)',
+                    lineHeight: 1,
                     overflow: 'hidden',
                     textOverflow: 'ellipsis',
                     whiteSpace: 'nowrap',
                   }}
                 >
-                  {draft.sellerMessage}
+                  농부가 구매자에게 하고 싶은 말
                 </Text>
               </HStack>
 
@@ -374,7 +345,7 @@ const VoiceResultStep = ({
             width: '100%',
             height: '48px',
             borderRadius: '12px',
-            fontWeight: 700,
+            fontWeight: 500,
           }}
         >
           등록하기
