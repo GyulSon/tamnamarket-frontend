@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, VStack, Text, Tabs, FONT_WEIGHT } from '@vapor-ui/core';
+import { Box, VStack, Text, Tabs } from '@vapor-ui/core';
 import { FarmerCard } from '@/features/buyer/home/components';
 
 const MOCK_FARMERS = [
@@ -46,7 +46,6 @@ export function BuyerFarmers() {
       <Tabs.Root value={activeTab} onValueChange={setActiveTab}>
         <VStack
           $css={{
-            paddingBottom: '84px',
             overflow: 'auto',
           }}
         >
@@ -84,6 +83,7 @@ export function BuyerFarmers() {
                   fontSize: '$200',
                   textAlign: 'center',
                   fontWeight: '600',
+                  height: '46px',
                   borderBottom:
                     activeTab === 'all' ? '3px solid $normal-900' : 'none',
                   color: activeTab === 'all' ? '$normal-900' : '$hint-100',
@@ -103,6 +103,7 @@ export function BuyerFarmers() {
                   padding: '$150 $000',
                   fontSize: '$200',
                   textAlign: 'center',
+                  height: '46px',
                   fontWeight: '600',
                   borderBottom:
                     activeTab === 'favorites'

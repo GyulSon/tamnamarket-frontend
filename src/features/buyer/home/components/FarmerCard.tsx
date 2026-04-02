@@ -54,7 +54,14 @@ export function FarmerCard({
       </Box>
 
       {/* 농부 정보 */}
-      <VStack $css={{ gap: '$200', flex: '1', alignItems: 'flex-start' }}>
+      <VStack
+        $css={{
+          gap: '$100',
+          flex: '1',
+          alignItems: 'flex-start',
+          padding: '$100',
+        }}
+      >
         {/* 농부 이름 + 화살표 */}
         <HStack
           $css={{
@@ -86,21 +93,21 @@ export function FarmerCard({
             {location && (
               <Box
                 $css={{
-                  backgroundColor: '$basic-grape-050',
+                  backgroundColor: '#F7F7F7',
                   borderRadius: '$200',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <Text typography="body4" $css={{ color: '#4C4C4C' }}>
+                <Text typography="subtitle2" $css={{ color: '#4C4C4C' }}>
                   {location}
                 </Text>
               </Box>
             )}
             {description && (
               <Text
-                typography="body4"
+                typography="subtitle2"
                 $css={{ color: '#4C4C4C', fontWeight: '500' }}
               >
                 {description}
