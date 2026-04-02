@@ -5,6 +5,7 @@ import {
   SignalPowerOutlineIcon,
   CheckCartOutlineIcon,
 } from '@vapor-ui/icons';
+import { useRouter } from 'next/navigation';
 
 interface FarmerCardProps {
   imageUrl?: string;
@@ -27,8 +28,13 @@ export function FarmerCard({
   radius = false,
   onClick,
 }: FarmerCardProps) {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push('/buyer/farmer/1');
+  };
   return (
     <HStack
+      onClick={handleClick}
       render={<button onClick={onClick} />}
       $css={{
         gap: '$150',

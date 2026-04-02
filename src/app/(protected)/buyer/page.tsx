@@ -37,6 +37,8 @@ const BuyerPage = () => {
         $css={{
           flex: 0,
           overflow: 'visible',
+          paddingLeft: '20px',
+          paddingRight: '20px',
         }}
       >
         <AppHeader />
@@ -49,7 +51,7 @@ const BuyerPage = () => {
           paddingBottom: '80px',
         }}
       >
-        <SectionContainer $css={{ marginBottom: 0 }}>
+        <SectionContainer $css={{ marginBottom: 0 }} pt={false}>
           {SCREENS[activeTab]}
         </SectionContainer>
       </Box>
