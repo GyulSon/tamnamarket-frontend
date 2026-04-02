@@ -93,8 +93,8 @@ const ImageResultStep = ({
                   결과를 확인하지 못했어요
                 </Text>
               ) : (
-                <Box
-                  as="p"
+                <Text
+                  typography="heading3"
                   $css={{
                     margin: 0,
                     fontSize: 'var(--vapor-typography-fontSize-500)',
@@ -102,13 +102,13 @@ const ImageResultStep = ({
                     lineHeight: 1.25,
                   }}
                 >
-                  <Box as="span" $css={{ color: '#ff7a2f' }}>
+                  <span style={{ color: '#ff7a2f' }}>
                     {resultLabel}
-                  </Box>
-                  <Box as="span" $css={{ color: '#111111' }}>
+                  </span>
+                  <span style={{ color: '#111111' }}>
                     로 인식했어요
-                  </Box>
-                </Box>
+                  </span>
+                </Text>
               )}
             </VStack>
 

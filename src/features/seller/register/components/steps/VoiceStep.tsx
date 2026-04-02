@@ -772,7 +772,7 @@ const VoiceStep = ({
             maxWidth: '720px',
             height: '48px',
             borderRadius: '12px',
-            backgroundColor: canSubmit && !isSubmitting ? '#f68632' : '#e5e7eb',
+            backgroundColor: canSubmit && !isSubmitting ? '#f68632' : '#f3c19b',
             color: '#ffffff',
             fontWeight: 700,
             border: 'none',
