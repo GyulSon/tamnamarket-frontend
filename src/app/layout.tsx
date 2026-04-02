@@ -1,7 +1,6 @@
 // 전역 레이아웃 파일
 import type { Metadata } from 'next';
 
-import '@vapor-ui/core/styles.css';
 import { Providers } from '@/app/providers';
 import { APP_DESCRIPTION, APP_NAME } from '@/lib/constants/app';
 import '@/styles/globals.css';
