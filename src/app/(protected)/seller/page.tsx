@@ -1,18 +1,17 @@
-import { Text, VStack } from '@vapor-ui/core';
+import { Button } from '@vapor-ui/core';
 
 import SectionContainer from '@/components/SectionContainer';
+import Link from 'next/link';
 
 const SellerPage = () => {
   return (
     <SectionContainer>
-      <VStack $css={{ gap: '$150' }}>
-        <Text render={<h1 />} typography="heading5">
-          판매자 페이지
-        </Text>
-        <Text typography="body2" $css={{ color: 'var(--muted-foreground)' }}>
-          판매자 페이지입니다.
-        </Text>
-      </VStack>
+      <Button nativeButton={false} render={<Link href="/seller/register" />}>
+        상품등록
+      </Button>
+      <Button nativeButton={false} render={<Link href="/seller/list" />}>
+        리스트
+      </Button>
     </SectionContainer>
   );
 };
