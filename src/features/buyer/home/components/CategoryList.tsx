@@ -1,5 +1,6 @@
 import { Box, HStack, VStack, Text } from '@vapor-ui/core';
 import Image from 'next/image';
+import { useBuyerStore } from '@/store/buyerStore';
 
 interface CategoryItem {
   id: string;
@@ -23,6 +24,7 @@ export function CategoryList({
   categories = DEFAULT_CATEGORIES,
   onCategoryClick,
 }: CategoryListProps) {
+  const { setActiveTab, setCategory } = useBuyerStore();
   return (
     <Box
       $css={{ paddingLeft: '$250', paddingRight: '$250', paddingTop: '$250' }}
@@ -31,7 +33,11 @@ export function CategoryList({
         {categories.map((cat) => (
           <VStack
             key={cat.id}
-            render={<button onClick={() => onCategoryClick?.(cat.id)} />}
+            render={<button onClick={() => {
+              onCategoryClick?.(cat.id);
+              setCategory(cat.label as '감귤류' | '우도 땅콩' | '고사리' | '구좌 당근');
+              setActiveTab('products');
+            }} />}
             $css={{
               alignItems: 'center',
               gap: '$075',

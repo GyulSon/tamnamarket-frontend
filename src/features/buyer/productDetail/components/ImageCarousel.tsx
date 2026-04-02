@@ -2,9 +2,12 @@ import { useState, useRef, useEffect } from 'react';
 
 interface ImageCarouselProps {
   images: string[];
+  indicatorBelow?: boolean;
+  imageHeight?: string;
+  borderRadius?: string;
 }
 
-export const ImageCarousel = ({ images }: ImageCarouselProps) => {
+export const ImageCarousel = ({ images, indicatorBelow = false, imageHeight, borderRadius }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -26,12 +29,27 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
     }
   }, [images.length]);
 
-  return (
+  const indicators = images.map((_, index) => (
+    <div
+      key={index}
+      style={{
+        width: '8px',
+        height: '8px',
+        borderRadius: '50%',
+        backgroundColor: index === currentIndex ? (indicatorBelow ? '#FF761B' : '#FFFFFF') : '#C6C6C6',
+        transition: 'background-color 0.3s ease',
+      }}
+    />
+  ));
+
+  const imageArea = (
     <div
       style={{
         position: 'relative',
         width: '100%',
         backgroundColor: '#d6d6d6',
+        ...(imageHeight && { height: imageHeight, overflow: 'hidden', display: 'flex', alignItems: 'center' }),
+        ...(borderRadius && { borderRadius, overflow: 'hidden' }),
       }}
     >
       {/* 이미지 스크롤 컨테이너 */}
@@ -72,6 +90,7 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
+                objectPosition: 'center center',
                 pointerEvents: 'none',
               }}
             />
@@ -79,32 +98,43 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
         ))}
       </div>
 
-      {/* 인디케이터 */}
-      <div
-        style={{
-          position: 'absolute',
-          bottom: '12px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          display: 'flex',
-          gap: '6px',
-          padding: '0 16px',
-          justifyContent: 'center',
-        }}
-      >
-        {images.map((_, index) => (
-          <div
-            key={index}
-            style={{
-              width: '8px',
-              height: '8px',
-              borderRadius: '50%',
-              backgroundColor: index === currentIndex ? '#FFFFFF' : '#C6C6C6',
-              transition: 'background-color 0.3s ease',
-            }}
-          />
-        ))}
-      </div>
+      {/* 오버레이 인디케이터 (기본) */}
+      {!indicatorBelow && (
+        <div
+          style={{
+            position: 'absolute',
+            bottom: '12px',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            display: 'flex',
+            gap: '6px',
+            padding: '0 16px',
+            justifyContent: 'center',
+          }}
+        >
+          {indicators}
+        </div>
+      )}
     </div>
   );
+
+  if (indicatorBelow) {
+    return (
+      <div style={{ width: '100%' }}>
+        {imageArea}
+        <div
+          style={{
+            display: 'flex',
+            gap: '6px',
+            justifyContent: 'center',
+            padding: '12px 16px',
+          }}
+        >
+          {indicators}
+        </div>
+      </div>
+    );
+  }
+
+  return imageArea;
 };

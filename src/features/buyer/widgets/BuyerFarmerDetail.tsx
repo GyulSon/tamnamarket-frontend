@@ -1,8 +1,10 @@
 import { VStack, Box } from '@vapor-ui/core';
 import { Icon } from '@iconify/react';
+import { useRouter } from 'next/navigation';
 import { ImageCarousel } from '../productDetail/components/ImageCarousel';
 import { ProductActions } from '../productDetail/components/ProductActions';
 import { FarmerCard, ProductCard } from '@/features/buyer/home/components';
+import { ProductCardHorizontal } from '@/features/buyer/home/components/ProductCardHorizontal';
 
 const mockProduct = {
   id: '1',
@@ -91,12 +93,8 @@ const mockProduct = {
 };
 
 export const BuyerFarmerDetail = () => {
-  // Mock 데이터
-
-  const handleLike = () => {
-    console.log('찜 버튼 클릭');
-    // 찜 로직
-  };
+  const router = useRouter();
+  const handleLike = () => {};
 
   return (
     <Box
@@ -127,7 +125,6 @@ export const BuyerFarmerDetail = () => {
             justifyContent: 'space-between',
             alignItems: 'center',
             padding: '20px 20px 12px 20px',
-            borderBottom: '1px solid #f0f0f0',
           }}
         >
           <button
@@ -160,34 +157,51 @@ export const BuyerFarmerDetail = () => {
           overflowX: 'hidden',
           marginTop: '72px', // 상단 고정 영역의 높이
           paddingBottom: '100px', // 하단 고정 영역의 높이
+          paddingLeft: '20px',
+          paddingRight: '20px',
         }}
       >
         {/* 이미지 캐러셀 */}
-        <ImageCarousel images={mockProduct.farmer.profileUrls} />
+        <ImageCarousel
+          images={mockProduct.farmer.profileUrls}
+          indicatorBelow
+          imageHeight="190px"
+          borderRadius="16px"
+        />
+
         <FarmerCard
+          isFarmerDetail={true}
           name={mockProduct.farmer.name}
           location={mockProduct.farmer.location}
           description={mockProduct.farmer.description}
           percent={mockProduct.farmer.percent}
           totalSellCnt={mockProduct.farmer.totalSellCnt}
         />
+        <Box
+          $css={{
+            height: '4px',
+            marginTop: '$200',
+            marginBottom: '$200',
+            backgroundColor: '#F2F2F2',
+          }}
+        />
 
         {/* 내용 영역 */}
         <VStack
           $css={{
-            padding: '$200',
+            paddingTop: '$200',
             backgroundColor: '#FFFFFF',
-            gap: '$100',
+            gap: '$200',
           }}
         >
           {mockProduct.products.map((product) => (
-            <ProductCard
+            <ProductCardHorizontal
               key={product.id}
               title={product.title}
-              location={product.location}
-              name={product.farmerName}
+              regesterDate={product.regesterDate}
               salePercent={product.salePercent}
               price={product.price}
+              onClick={() => router.push(`/buyer/products/${product.id}`)}
             />
           ))}
         </VStack>
