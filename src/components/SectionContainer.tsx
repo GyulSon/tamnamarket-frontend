@@ -17,6 +17,8 @@ const SectionContainer = ({
     <Box
       $css={{
         width: '100%',
+        paddingTop: '20px',
+        paddingBottom: '20px',
         paddingLeft: pl ? '20px' : '0',
         paddingRight: pr ? '20px' : '0',
         ...$css,
