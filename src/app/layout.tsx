@@ -1,5 +1,5 @@
 // 전역 레이아웃 파일
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 
 import { Providers } from '@/app/providers';
 import { APP_DESCRIPTION, APP_NAME } from '@/lib/constants/app';
@@ -9,6 +9,11 @@ export const metadata: Metadata = {
   title: APP_NAME,
   description: APP_DESCRIPTION,
   manifest: '/manifest.webmanifest',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'black-translucent',
+    title: APP_NAME,
+  },
   icons: {
     apple: '/apple-touch-icon.png',
     icon: [
@@ -16,6 +21,13 @@ export const metadata: Metadata = {
       { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
     ],
   },
+};
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#fe7b1d',
 };
 
 type RootLayoutProps = Readonly<{

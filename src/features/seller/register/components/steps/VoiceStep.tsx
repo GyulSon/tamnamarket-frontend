@@ -6,7 +6,7 @@ import { Box, Button, Text, VStack } from '@vapor-ui/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 const VOICE_QUESTIONS = [
-  '특산품의 무게는 몇 킬로그램인가요?',
+  '특산품의 무게는 몇 kg인가요?',
   '특산품의 수확일은 언제인가요?',
   '특산품 맛의 특징을 알려주세요.',
   '구매자에게 하고 싶은 말을 해주세요.',
@@ -28,15 +28,27 @@ const VOICE_LEVEL_THRESHOLD = 0.08;
 const createMockVoiceAnswerFiles = () =>
   VOICE_QUESTIONS.map(
     (_, index) =>
-      new File([`mock voice answer ${index + 1}`], `sale-answer-${index + 1}.webm`, {
-        type: 'audio/webm',
-      })
+      new File(
+        [`mock voice answer ${index + 1}`],
+        `sale-answer-${index + 1}.webm`,
+        {
+          type: 'audio/webm',
+        }
+      )
   );
 
 type BrowserWindow = Window &
   typeof globalThis & {
     webkitAudioContext?: typeof AudioContext;
   };
+
+type AudioSessionType = 'auto' | 'playback' | 'play-and-record';
+
+type BrowserNavigator = Navigator & {
+  audioSession?: {
+    type: AudioSessionType;
+  };
+};
 
 type VoiceStepProps = {
   isActive: boolean;
@@ -74,7 +86,6 @@ const VoiceStep = ({
   const speakQuestionRef = useRef<(questionIndex: number) => void>(
     () => undefined
   );
-  const hasAutoStartedRef = useRef(false);
   const isUnmountedRef = useRef(false);
   const audioStreamRef = useRef<MediaStream | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -121,13 +132,25 @@ const VoiceStep = ({
     audioStreamRef.current = null;
   }, []);
 
+  const setAudioSessionType = useCallback((type: AudioSessionType) => {
+    const browserNavigator = navigator as BrowserNavigator;
+
+    if (!browserNavigator.audioSession) {
+      return;
+    }
+
+    try {
+      browserNavigator.audioSession.type = type;
+    } catch {
+      // iOS WebKit experimental API라 실패해도 흐름은 유지한다.
+    }
+  }, []);
+
   const speakQuestion = useCallback(
     (questionIndex: number) => {
       if (typeof window === 'undefined' || !('speechSynthesis' in window)) {
         setFlowStatus('idle');
-        setStatusMessage(
-          '이 브라우저는 질문 음성 재생을 지원하지 않아요.'
-        );
+        setStatusMessage('이 브라우저는 질문 음성 재생을 지원하지 않아요.');
         return;
       }
 
@@ -261,14 +284,12 @@ const VoiceStep = ({
                   return;
                 }
 
-                volumeFrameRef.current = window.requestAnimationFrame(
-                  monitorVolume
-                );
+                volumeFrameRef.current =
+                  window.requestAnimationFrame(monitorVolume);
               };
 
-              volumeFrameRef.current = window.requestAnimationFrame(
-                monitorVolume
-              );
+              volumeFrameRef.current =
+                window.requestAnimationFrame(monitorVolume);
             } catch {
               cleanupAudioMonitoring();
             }
@@ -280,7 +301,9 @@ const VoiceStep = ({
             }
 
             setFlowStatus('idle');
-            setStatusMessage('답변 녹음을 시작하지 못했어요. 다시 시도해주세요.');
+            setStatusMessage(
+              '답변 녹음을 시작하지 못했어요. 다시 시도해주세요.'
+            );
           };
 
           mediaRecorder.onstop = () => {
@@ -360,7 +383,12 @@ const VoiceStep = ({
 
       window.speechSynthesis.speak(utterance);
     },
-    [cleanupAudioMonitoring, clearMaxRecordingTimer, clearNoSpeechTimer, onVoiceAnswersChange]
+    [
+      cleanupAudioMonitoring,
+      clearMaxRecordingTimer,
+      clearNoSpeechTimer,
+      onVoiceAnswersChange,
+    ]
   );
 
   useEffect(() => {
@@ -374,24 +402,29 @@ const VoiceStep = ({
     }
 
     try {
+      setAudioSessionType('play-and-record');
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioStreamRef.current = stream;
       return true;
     } catch {
+      setAudioSessionType('auto');
       setFlowStatus('idle');
       setStatusMessage(
         '마이크 권한이 거부되었어요. 브라우저 설정에서 허용해주세요.'
       );
       return false;
     }
-  }, []);
+  }, [setAudioSessionType]);
 
   const resetPendingVoiceFlow = useCallback(() => {
     clearNoSpeechTimer();
     clearMaxRecordingTimer();
     cleanupAudioMonitoring();
 
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== 'inactive'
+    ) {
       shouldFinalizeRecordingRef.current = false;
       mediaRecorderRef.current.stop();
     }
@@ -404,10 +437,12 @@ const VoiceStep = ({
     }
 
     stopAudioStream();
+    setAudioSessionType('auto');
   }, [
     cleanupAudioMonitoring,
     clearMaxRecordingTimer,
     clearNoSpeechTimer,
+    setAudioSessionType,
     stopAudioStream,
   ]);
 
@@ -439,11 +474,7 @@ const VoiceStep = ({
     onVoiceAnswersChange([]);
     setStatusMessage('');
     speakQuestion(0);
-  }, [
-    onVoiceAnswersChange,
-    requestAudioPermission,
-    speakQuestion,
-  ]);
+  }, [onVoiceAnswersChange, requestAudioPermission, speakQuestion]);
 
   const handleReplayQuestion = useCallback(() => {
     speakQuestion(currentQuestionIndexRef.current);
@@ -495,7 +526,6 @@ const VoiceStep = ({
       return;
     }
 
-    hasAutoStartedRef.current = false;
     resetPendingVoiceFlow();
 
     if (
@@ -508,28 +538,20 @@ const VoiceStep = ({
     }
   }, [flowStatus, isActive, resetPendingVoiceFlow]);
 
-  useEffect(() => {
-    if (!isActive || hasAutoStartedRef.current || voiceAnswerFiles.length > 0) {
-      return;
-    }
-
-    if (flowStatus !== 'idle') {
-      return;
-    }
-
-    hasAutoStartedRef.current = true;
-    void handleStartVoiceFlow();
-  }, [flowStatus, handleStartVoiceFlow, isActive, voiceAnswerFiles.length]);
-
   const isCompleted = flowStatus === 'completed';
   const completedAnswerCount = voiceAnswerFiles.filter(Boolean).length;
   const canSubmit = completedAnswerCount === VOICE_QUESTIONS.length;
-  const progressIndex = Math.min(currentQuestionIndex, VOICE_PROGRESS_SEGMENTS - 1);
-  const showHelperAction =
-    isSpeechSupported &&
-    !isCompleted &&
-    !isSubmitting &&
-    flowStatus === 'idle';
+  const progressIndex = Math.min(
+    currentQuestionIndex,
+    VOICE_PROGRESS_SEGMENTS - 1
+  );
+  const showFloatingAction =
+    isSpeechSupported && !isCompleted && !isSubmitting && flowStatus === 'idle';
+  const currentQuestionExample = VOICE_QUESTION_EXAMPLES[currentQuestionIndex];
+  const currentQuestionExampleBody = currentQuestionExample.replace(
+    /^예시\s*/,
+    ''
+  );
   const displayedErrorMessage = submitError || statusMessage;
   const shouldShowStatusMessage = Boolean(displayedErrorMessage);
 
@@ -548,15 +570,12 @@ const VoiceStep = ({
       <VStack
         $css={{
           width: '100%',
-          maxWidth: '1280px',
           minHeight: '100dvh',
           paddingTop: '24px',
           paddingBottom: '28px',
           paddingLeft: '16px',
           paddingRight: '16px',
           justifyContent: 'space-between',
-          marginLeft: 'auto',
-          marginRight: 'auto',
           boxSizing: 'border-box',
         }}
       >
@@ -571,9 +590,10 @@ const VoiceStep = ({
         >
           <Box
             $css={{
+              position: 'relative',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'flex-start',
             }}
           >
             <button
@@ -605,22 +625,26 @@ const VoiceStep = ({
               onClick={handleSkipForTest}
               style={{
                 display: 'inline-flex',
-                width: '32px',
-                height: '32px',
+                position: 'absolute',
+                top: '-8px',
+                right: '-4px',
+                width: '20px',
+                height: '20px',
                 alignItems: 'center',
                 justifyContent: 'center',
-                border: 'none',
+                border: '1px solid transparent',
                 borderRadius: '999px',
-                backgroundColor: '#dc2626',
+                backgroundColor: 'transparent',
                 padding: 0,
                 cursor: 'pointer',
+                opacity: 0,
               }}
             >
               <Icon
                 icon="mdi:chevron-right"
-                width="20"
-                height="20"
-                color="#ffffff"
+                width="12"
+                height="12"
+                color="transparent"
               />
             </button>
           </Box>
@@ -634,23 +658,29 @@ const VoiceStep = ({
                 width: '100%',
               }}
             >
-              {Array.from({ length: VOICE_PROGRESS_SEGMENTS }).map((_, index) => (
-                <Box
-                  key={`voice-progress-${index}`}
-                  $css={{
-                    height: '8px',
-                    borderRadius: '999px',
-                    backgroundColor:
-                      index <= progressIndex ? '#f68b3b' : '#e5e5e5',
-                  }}
-                />
-              ))}
+              {Array.from({ length: VOICE_PROGRESS_SEGMENTS }).map(
+                (_, index) => (
+                  <Box
+                    key={`voice-progress-${index}`}
+                    $css={{
+                      height: '8px',
+                      borderRadius: '999px',
+                      backgroundColor:
+                        index <= progressIndex ? '#f68b3b' : '#e5e5e5',
+                    }}
+                  />
+                )
+              )}
             </Box>
 
             <VStack $css={{ gap: '12px' }}>
               <Text
                 typography="body2"
-                $css={{ color: '#666666', fontWeight: 700 }}
+                $css={{
+                  color: '#666666',
+                  fontWeight: 700,
+                  fontSize: 'var(--vapor-typography-fontSize-100)',
+                }}
               >
                 특산품 상세 설명
               </Text>
@@ -658,7 +688,7 @@ const VoiceStep = ({
                 typography="heading4"
                 $css={{
                   color: '#111111',
-                  fontSize: '22px',
+                  fontSize: 'var(--vapor-typography-fontSize-400)',
                   lineHeight: 1.4,
                   fontWeight: 800,
                 }}
@@ -684,9 +714,13 @@ const VoiceStep = ({
                     color: '#8a8a8a',
                     fontWeight: 600,
                     lineHeight: 1.45,
+                    fontSize: 'var(--vapor-typography-fontSize-100)',
                   }}
                 >
-                  {VOICE_QUESTION_EXAMPLES[currentQuestionIndex]}
+                  <span style={{ color: '#262626', marginRight: '4px' }}>
+                    예시
+                  </span>
+                  {currentQuestionExampleBody}
                 </Text>
               </Box>
             </VStack>
@@ -708,8 +742,8 @@ const VoiceStep = ({
           <Image
             src="/images/voice-visualizer.gif"
             alt="음성 인식 시각화"
-            width={88}
-            height={88}
+            width={140}
+            height={140}
             unoptimized
             style={{ objectFit: 'contain' }}
           />
@@ -727,24 +761,6 @@ const VoiceStep = ({
             >
               {displayedErrorMessage}
             </Text>
-          ) : null}
-
-          {showHelperAction ? (
-            <Button
-              colorPalette="primary"
-              size="sm"
-              onClick={
-                completedAnswerCount === 0
-                  ? () => void handleStartVoiceFlow()
-                  : handleReplayQuestion
-              }
-              $css={{
-                minWidth: '112px',
-                borderRadius: '999px',
-              }}
-            >
-              {completedAnswerCount === 0 ? '음성 시작' : '다시 듣기'}
-            </Button>
           ) : null}
         </VStack>
 
@@ -766,6 +782,57 @@ const VoiceStep = ({
         >
           {isSubmitting ? '등록 중...' : '상품 등록하기'}
         </Button>
+
+        {showFloatingAction ? (
+          <Box
+            $css={{
+              position: 'absolute',
+              left: '50%',
+              bottom: '92px',
+              transform: 'translateX(-50%)',
+              width: 'calc(100% - 32px)',
+              maxWidth: '720px',
+              zIndex: 2,
+              display: 'flex',
+              justifyContent: 'flex-start',
+            }}
+          >
+            <Button
+              size="sm"
+              onClick={
+                completedAnswerCount === 0
+                  ? () => void handleStartVoiceFlow()
+                  : handleReplayQuestion
+              }
+              aria-label={
+                completedAnswerCount === 0 ? '음성 시작' : '질문 다시 듣기'
+              }
+              title={completedAnswerCount === 0 ? '음성 시작' : '다시 듣기'}
+              $css={{
+                minWidth: '56px',
+                width: '56px',
+                height: '56px',
+                padding: 0,
+                border: 'none',
+                borderRadius: 0,
+                backgroundColor: 'transparent',
+                boxShadow: 'none',
+                color: 'transparent',
+              }}
+            >
+              <Icon
+                icon={
+                  completedAnswerCount === 0
+                    ? 'solar:microphone-3-bold'
+                    : 'solar:volume-loud-bold'
+                }
+                width="24"
+                height="24"
+                color="transparent"
+              />
+            </Button>
+          </Box>
+        ) : null}
       </VStack>
     </Box>
   );
