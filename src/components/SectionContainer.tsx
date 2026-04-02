@@ -4,11 +4,15 @@ import { ComponentProps } from 'react';
 type SectionContainerProps = ComponentProps<typeof Box> & {
   pl?: boolean;
   pr?: boolean;
+  pt?: boolean;
+  pb?: boolean;
 };
 
 const SectionContainer = ({
   children,
   $css,
+  pt = true,
+  pb = true,
   pl = true,
   pr = true,
   ...props
@@ -17,8 +21,8 @@ const SectionContainer = ({
     <Box
       $css={{
         width: '100%',
-        paddingTop: '20px',
-        paddingBottom: '20px',
+        paddingTop: pt ? '20px' : '0',
+        paddingBottom: pb ? '20px' : '0',
         paddingLeft: pl ? '20px' : '0',
         paddingRight: pr ? '20px' : '0',
         ...$css,
