@@ -3,35 +3,83 @@
 import { Box, Text, VStack } from '@vapor-ui/core';
 import { useEffect, useMemo, useState } from 'react';
 
-import PhotoStep from '@/features/seller/register/components/steps/PhotoStep';
+import CameraStep from '@/features/seller/register/components/steps/CameraStep';
+import ImageAnalyzingStep from '@/features/seller/register/components/steps/ImageAnalyzingStep';
+import ImageResultStep from '@/features/seller/register/components/steps/ImageResultStep';
 import PreviewStep from '@/features/seller/register/components/steps/PreviewStep';
 import VoiceStep from '@/features/seller/register/components/steps/VoiceStep';
+import { classifySaleImage } from '@/lib/api/project';
 
-type RegisterStep = 'photo' | 'voice' | 'loading' | 'preview' | 'complete';
+type RegisterStep =
+  | 'camera'
+  | 'imageAnalyzing'
+  | 'imageResult'
+  | 'voice'
+  | 'preview'
+  | 'complete';
 
 const SellerRegisterPage = () => {
-  const [step, setStep] = useState<RegisterStep>('photo');
+  const [step, setStep] = useState<RegisterStep>('camera');
+  const [capturedPhotoFile, setCapturedPhotoFile] = useState<File | null>(null);
   const [photoNames, setPhotoNames] = useState<string[]>([]);
+  const [capturedPhotoPreviewUrl, setCapturedPhotoPreviewUrl] = useState('');
+  const [classificationError, setClassificationError] = useState('');
+  const [classificationResult, setClassificationResult] = useState('');
   const [voiceText, setVoiceText] = useState('');
   const stepIndexMap: Record<RegisterStep, number> = {
-    photo: 0,
-    voice: 1,
-    loading: 2,
-    preview: 3,
-    complete: 4,
+    camera: 0,
+    imageAnalyzing: 1,
+    imageResult: 2,
+    voice: 3,
+    preview: 4,
+    complete: 5,
   };
 
   useEffect(() => {
-    if (step !== 'loading') {
+    if (step !== 'imageAnalyzing' || !capturedPhotoFile) {
       return;
     }
 
-    const timer = window.setTimeout(() => {
-      setStep('preview');
-    }, 1800);
+    let isCancelled = false;
 
-    return () => window.clearTimeout(timer);
-  }, [step]);
+    const requestClassification = async () => {
+      try {
+        const response = await classifySaleImage(capturedPhotoFile);
+
+        if (isCancelled) {
+          return;
+        }
+
+        setClassificationResult(response.result);
+        setClassificationError('');
+      } catch {
+        if (isCancelled) {
+          return;
+        }
+
+        setClassificationResult('');
+        setClassificationError('사진 분석 결과를 불러오지 못했다.');
+      } finally {
+        if (!isCancelled) {
+          setStep('imageResult');
+        }
+      }
+    };
+
+    void requestClassification();
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [capturedPhotoFile, step]);
+
+  useEffect(() => {
+    return () => {
+      if (capturedPhotoPreviewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(capturedPhotoPreviewUrl);
+      }
+    };
+  }, [capturedPhotoPreviewUrl]);
 
   const generatedPost = useMemo(() => {
     const trimmedVoiceText = voiceText.trim();
@@ -45,6 +93,7 @@ const SellerRegisterPage = () => {
         : '음성 인식 결과를 바탕으로 자동 생성된 상품 설명이다.',
     };
   }, [voiceText]);
+
   const currentStepIndex = stepIndexMap[step];
 
   return (
@@ -64,10 +113,33 @@ const SellerRegisterPage = () => {
         }}
       >
         <Box $css={{ flex: '0 0 100%' }}>
-          <PhotoStep
+          <CameraStep
             fileNames={photoNames}
-            onFileChange={setPhotoNames}
-            onNext={() => setStep('voice')}
+            onCapture={({ file, fileName, previewUrl }) => {
+              if (capturedPhotoPreviewUrl.startsWith('blob:')) {
+                URL.revokeObjectURL(capturedPhotoPreviewUrl);
+              }
+
+              setCapturedPhotoFile(file);
+              setPhotoNames([fileName]);
+              setCapturedPhotoPreviewUrl(previewUrl);
+              setClassificationResult('');
+              setClassificationError('');
+              setStep('imageAnalyzing');
+            }}
+          />
+        </Box>
+
+        <Box $css={{ flex: '0 0 100%' }}>
+          <ImageAnalyzingStep previewUrl={capturedPhotoPreviewUrl} />
+        </Box>
+
+        <Box $css={{ flex: '0 0 100%' }}>
+          <ImageResultStep
+            classificationError={classificationError}
+            classificationResult={classificationResult}
+            previewUrl={capturedPhotoPreviewUrl}
+            onConfirm={() => setStep('voice')}
           />
         </Box>
 
@@ -75,33 +147,9 @@ const SellerRegisterPage = () => {
           <VoiceStep
             voiceText={voiceText}
             onVoiceTextChange={setVoiceText}
-            onNext={() => setStep('loading')}
+            onBack={() => setStep('imageResult')}
+            onNext={() => setStep('preview')}
           />
-        </Box>
-
-        <Box $css={{ flex: '0 0 100%' }}>
-          <VStack
-            $css={{
-              width: '100%',
-              minHeight: '100dvh',
-              padding: '$200',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '$100',
-            }}
-          >
-            <Box
-              $css={{
-                width: '32px',
-                height: '32px',
-                borderStyle: 'solid',
-                borderWidth: '1px',
-              }}
-            />
-            <Text render={<h1 />} typography="heading5">
-              AI 응답 결과 생성중
-            </Text>
-          </VStack>
         </Box>
 
         <Box $css={{ flex: '0 0 100%' }}>
