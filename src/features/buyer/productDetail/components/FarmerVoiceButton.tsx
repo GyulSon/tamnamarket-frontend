@@ -17,7 +17,7 @@ export const FarmerVoiceButton = ({ onClick }: FarmerVoiceButtonProps) => {
         padding: '10px 12px',
         backgroundColor: '#393939',
         border: 'none',
-        borderRadius: '8px',
+        borderRadius: '24px',
         cursor: 'pointer',
         transition: 'background-color 0.2s ease',
       }}
@@ -53,7 +53,7 @@ export const FarmerVoiceButton = ({ onClick }: FarmerVoiceButtonProps) => {
             whiteSpace: 'nowrap',
           }}
         >
-          농부의 한 마디 듣기
+          농부가 구매자에게 하고 싶은 말
         </span>
       </div>
       <Icon

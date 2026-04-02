@@ -1,6 +1,7 @@
 import Image from 'next/image';
-import { Box, VStack, Text } from '@vapor-ui/core';
+import { Box, VStack, Text, IconButton } from '@vapor-ui/core';
 import { useRouter } from 'next/navigation';
+import { HeartIcon } from '@vapor-ui/icons';
 
 interface ProductGridItemProps {
   imageUrl?: string;
@@ -28,7 +29,7 @@ export function ProductGridItem({
 
   return (
     <VStack
-      render={<button onClick={handleClick} />}
+      onClick={handleClick}
       $css={{
         gap: '$075',
         width: '100%',
@@ -51,50 +52,76 @@ export function ProductGridItem({
         }}
       >
         <Image src={imageUrl} alt={title} fill style={{ objectFit: 'cover' }} />
-        {salePercent !== undefined && (
-          <Box
-            $css={{
-              position: 'absolute',
-              top: '$075',
-              left: '$075',
-              backgroundColor: 'var(--vapor-color-orange-500)',
-              borderRadius: '$150',
-              paddingTop: '$025',
-              paddingBottom: '$025',
-              paddingLeft: '$075',
-              paddingRight: '$075',
-            }}
-          >
-            <Text
-              typography="body4"
-              $css={{ color: '$white', fontWeight: '700' }}
-            >
-              {salePercent}%
-            </Text>
-          </Box>
-        )}
+        <IconButton
+          shape="circle"
+          aria-label="Like"
+          $css={{
+            position: 'absolute',
+            top: '$075',
+            right: '$075',
+            backgroundColor: '$basic-gray-800',
+          }}
+        >
+          <HeartIcon />
+        </IconButton>
       </Box>
 
       {/* 상품 정보 */}
       <VStack $css={{ gap: '$025', width: '100%' }}>
         {location && farmerName && (
-          <Text typography="body4" foreground="hint-100">
-            {location} · {farmerName}
+          <Text
+            typography="heading5"
+            $css={{ fontWeight: '700', color: '#000' }}
+          >
+            {title}
           </Text>
         )}
-        <Text
-          typography="body3"
-          foreground="normal-200"
-          $css={{ fontWeight: '600', textAlign: 'left' }}
+        <Box
+          $css={{
+            gap: '$025',
+            display: 'flex',
+            alignContent: 'center',
+          }}
         >
-          {title}
-        </Text>
+          <Text
+            typography="subtitle2"
+            foreground="normal-200"
+            $css={{
+              fontWeight: '500',
+              textAlign: 'left',
+              color: '#4C4C4C',
+              backgroundColor: '#F2F2F2',
+              padding: '$025',
+              borderRadius: '$200',
+            }}
+          >
+            {location}
+          </Text>
+          <Text
+            typography="subtitle2"
+            foreground="normal-200"
+            $css={{
+              fontWeight: '500',
+              textAlign: 'center',
+              color: '#767676',
+              padding: '$025',
+            }}
+          >
+            {farmerName}
+          </Text>
+        </Box>
         {price !== undefined && (
           <Text
-            typography="body3"
+            typography="heading6"
             foreground="normal-200"
-            $css={{ fontWeight: '700' }}
+            $css={{ fontWeight: '500' }}
           >
+            <Text
+              typography="heading6"
+              $css={{ color: '#FF761B', fontWeight: '500' }}
+            >
+              {salePercent}%
+            </Text>{' '}
             {price.toLocaleString()}원
           </Text>
         )}

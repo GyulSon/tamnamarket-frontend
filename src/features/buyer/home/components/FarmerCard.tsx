@@ -5,6 +5,7 @@ import {
   SignalPowerOutlineIcon,
   CheckCartOutlineIcon,
 } from '@vapor-ui/icons';
+import { useRouter } from 'next/navigation';
 
 interface FarmerCardProps {
   imageUrl?: string;
@@ -12,6 +13,7 @@ interface FarmerCardProps {
   location?: string;
   description?: string;
   percent?: number;
+  radius?: boolean;
   totalSellCnt?: number;
   onClick?: () => void;
 }
@@ -23,10 +25,16 @@ export function FarmerCard({
   description,
   percent,
   totalSellCnt,
+  radius = false,
   onClick,
 }: FarmerCardProps) {
+  const router = useRouter();
+  const handleClick = () => {
+    router.push('/buyer/farmer/1');
+  };
   return (
     <HStack
+      onClick={handleClick}
       render={<button onClick={onClick} />}
       $css={{
         gap: '$150',
@@ -39,22 +47,55 @@ export function FarmerCard({
       }}
     >
       {/* 농부 프로필 이미지 */}
-      <Box
-        $css={{
-          width: '88px',
-          height: '88px',
-          backgroundColor: '$gray-200',
-          borderRadius: '$400',
-          overflow: 'hidden',
-          flexShrink: '0',
-          position: 'relative',
-        }}
-      >
-        <Image src={imageUrl} alt={name} fill style={{ objectFit: 'cover' }} />
-      </Box>
+      {radius ? (
+        <Box
+          $css={{
+            width: '48px',
+            height: '48px',
+            backgroundColor: '$gray-200',
+            borderRadius: '$800',
+            overflow: 'hidden',
+            flexShrink: '0',
+            position: 'relative',
+          }}
+        >
+          <Image
+            src={imageUrl}
+            alt={name}
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        </Box>
+      ) : (
+        <Box
+          $css={{
+            width: '88px',
+            height: '88px',
+            backgroundColor: '$gray-200',
+            borderRadius: '$400',
+            overflow: 'hidden',
+            flexShrink: '0',
+            position: 'relative',
+          }}
+        >
+          <Image
+            src={imageUrl}
+            alt={name}
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        </Box>
+      )}
 
       {/* 농부 정보 */}
-      <VStack $css={{ gap: '$200', flex: '1', alignItems: 'flex-start' }}>
+      <VStack
+        $css={{
+          gap: '$100',
+          flex: '1',
+          alignItems: 'flex-start',
+          padding: radius ? '$000' : '$100',
+        }}
+      >
         {/* 농부 이름 + 화살표 */}
         <HStack
           $css={{
@@ -76,30 +117,37 @@ export function FarmerCard({
 
         {/* 위치 + 설명 (뱃지) */}
         <HStack $css={{ gap: '$050', alignItems: 'center', flexWrap: 'wrap' }}>
-          {location && (
-            <Text typography="body4" $css={{ color: '#4C4C4C' }}>
-              {location}
-            </Text>
-          )}
-          {description && (
-            <Box
-              $css={{
-                backgroundColor: '$canvas-100',
-                paddingLeft: '$075',
-                paddingRight: '$075',
-                paddingTop: '$040',
-                paddingBottom: '$040',
-                borderRadius: '$150',
-              }}
-            >
+          <HStack
+            $css={{
+              gap: '$050',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {location && (
+              <Box
+                $css={{
+                  backgroundColor: '#F7F7F7',
+                  borderRadius: '$200',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <Text typography="subtitle2" $css={{ color: '#4C4C4C' }}>
+                  {location}
+                </Text>
+              </Box>
+            )}
+            {description && (
               <Text
-                typography="body4"
+                typography="subtitle2"
                 $css={{ color: '#4C4C4C', fontWeight: '500' }}
               >
                 {description}
               </Text>
-            </Box>
-          )}
+            )}
+          </HStack>
         </HStack>
 
         {/* 재구매율 + 누적판매 */}
@@ -115,7 +163,13 @@ export function FarmerCard({
                 typography="body4"
                 $css={{ color: '#000', fontWeight: '600' }}
               >
-                재구매율 {percent}%
+                재구매율
+              </Text>
+              <Text
+                typography="body4"
+                $css={{ color: '#FF761B', fontWeight: '600' }}
+              >
+                {percent}%
               </Text>
             </HStack>
           )}
@@ -130,7 +184,13 @@ export function FarmerCard({
                 typography="body4"
                 $css={{ color: '#000', fontWeight: '600' }}
               >
-                누적판매 {totalSellCnt.toLocaleString()}건
+                누적판매
+              </Text>
+              <Text
+                typography="body4"
+                $css={{ color: '#FF761B', fontWeight: '600' }}
+              >
+                {totalSellCnt.toLocaleString()}건
               </Text>
             </HStack>
           )}

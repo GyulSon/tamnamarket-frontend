@@ -1,19 +1,18 @@
-import { VStack, Box } from '@vapor-ui/core';
+import { VStack, Box, Text, HStack } from '@vapor-ui/core';
 import { Icon } from '@iconify/react';
 import { ImageCarousel } from '../productDetail/components/ImageCarousel';
-import { ProductBadge } from '../productDetail/components/ProductBadge';
-import { ProductTitle } from '../productDetail/components/ProductTitle';
 import { ProductPrice } from '../productDetail/components/ProductPrice';
-import { ProductInfoItem } from '../productDetail/components/ProductInfoItem';
 import { FarmerVoiceButton } from '../productDetail/components/FarmerVoiceButton';
-import { ProductDescription } from '../productDetail/components/ProductDescription';
 import { ProductActions } from '../productDetail/components/ProductActions';
+import { PublishOutlineIcon } from '@vapor-ui/icons';
+import { FarmerCard } from '@/features/buyer/home/components';
 
 export const BuyerProductDetail = () => {
   // Mock 데이터
   const mockProduct = {
     id: '1',
     title: '햇청귤 2kg 한 박스(특품)',
+    category: '감귤류',
     currentPrice: '28,000원',
     originalPrice: '32,000원',
     images: [
@@ -24,16 +23,14 @@ export const BuyerProductDetail = () => {
     ],
     description:
       '애월읍 김순자 할망께서 40년 경력으로 정성껏 재배하신 햇청귤입니다. 올해는 일교차가 커서 당도가 특히 높으며, 비타민C가 풍부해 환절기 건강관리에 좋습니다. 농약을 최소화하고 유기농 퇴비로 키워 안심하고 드실 수 있습니다.',
-    infoItems: [
-      {
-        label: '상품 정보',
-        value: '새콤달콤한 제주 청귤\n싱싱함이 살아있는',
-      },
-      {
-        label: '배송 정보',
-        value: '오후 2시까지 주문시\n당일 배송 가능',
-      },
-    ],
+    farmer: {
+      id: '3',
+      name: '이제주 농부',
+      location: '구좌읍',
+      description: '농사 경력 40년',
+      percent: 87,
+      totalSellCnt: 582,
+    },
   };
 
   const handleBuy = () => {
@@ -73,28 +70,6 @@ export const BuyerProductDetail = () => {
           backgroundColor: '#FFFFFF',
         }}
       >
-        {/* 상태 바 */}
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            paddingTop: '8px',
-            paddingBottom: '8px',
-            paddingLeft: '16px',
-            paddingRight: '16px',
-            fontSize: '14px',
-            color: '#000000',
-          }}
-        >
-          <span>9:41</span>
-          <div style={{ display: 'flex', gap: '4px' }}>
-            <Icon icon="mdi:wifi" width="16" height="16" />
-            <Icon icon="mdi:signal-cellular-3" width="16" height="16" />
-            <Icon icon="mdi:battery" width="16" height="16" />
-          </div>
-        </div>
-
         {/* 헤더 */}
         <div
           style={{
@@ -117,7 +92,12 @@ export const BuyerProductDetail = () => {
               justifyContent: 'center',
             }}
           >
-            <Icon icon="mdi:chevron-left" width="24" height="24" color="#000000" />
+            <Icon
+              icon="mdi:chevron-left"
+              width="24"
+              height="24"
+              color="#000000"
+            />
           </button>
         </div>
       </div>
@@ -137,22 +117,46 @@ export const BuyerProductDetail = () => {
 
         {/* 내용 영역 */}
         <VStack
-          gap="$300"
           $css={{
-            padding: '$400 $500 $400 $500',
+            padding: '$200',
             backgroundColor: '#FFFFFF',
+            gap: '$100',
           }}
         >
           {/* 배지 + 제목 + 가격 섹션 */}
           <VStack
-            gap="$200"
             $css={{
               width: '100%',
             }}
           >
-            <ProductBadge label="특가상품" />
+            <Text
+              $css={{
+                backgroundColor: '#F7F7F7',
+                color: '#4C4C4C',
+                fontSize: '12px',
+                fontWeight: 500,
+                marginRight: 'auto',
+                borderRadius: '4px',
+              }}
+            >
+              {mockProduct.category}
+            </Text>
 
-            <ProductTitle title={mockProduct.title} />
+            <HStack
+              $css={{ justifyContent: 'space-between', alignItems: 'center' }}
+            >
+              <Text
+                typography="heading3"
+                style={{
+                  color: '#000',
+                  lineHeight: '1.5',
+                  fontWeight: 700,
+                }}
+              >
+                {mockProduct.title}
+              </Text>
+              <PublishOutlineIcon width="28" height="28" />
+            </HStack>
 
             <ProductPrice
               currentPrice={mockProduct.currentPrice}
@@ -161,26 +165,41 @@ export const BuyerProductDetail = () => {
           </VStack>
 
           {/* 정보 카드 섹션 */}
-          <VStack
-            gap="$200"
+          <Box
             $css={{
               width: '100%',
+              padding: '$200',
+              border: '1px solid #E1E1E1',
+              borderRadius: '8px',
             }}
           >
-            {mockProduct.infoItems.map((item, index) => (
-              <ProductInfoItem
-                key={index}
-                label={item.label}
-                value={item.value}
-              />
-            ))}
-          </VStack>
+            <FarmerCard
+              radius={true}
+              key={mockProduct.farmer.id}
+              name={mockProduct.farmer.name}
+              location={mockProduct.farmer.location}
+              description={mockProduct.farmer.description}
+              percent={mockProduct.farmer.percent}
+              totalSellCnt={mockProduct.farmer.totalSellCnt}
+            />
+          </Box>
 
           {/* 농부의 한 마디 버튼 */}
           <FarmerVoiceButton onClick={handleFarmerVoice} />
 
           {/* 제품 설명 */}
-          <ProductDescription description={mockProduct.description} />
+          <Text
+            typography="body2"
+            style={{
+              color: '#262626',
+              lineHeight: '1.6',
+              whiteSpace: 'pre-wrap',
+              wordBreak: 'break-word',
+              marginTop: '16px',
+            }}
+          >
+            {mockProduct.description}
+          </Text>
         </VStack>
       </div>
 
@@ -193,7 +212,6 @@ export const BuyerProductDetail = () => {
           right: 0,
           zIndex: 100,
           backgroundColor: '#FFFFFF',
-          borderTop: '1px solid #f0f0f0',
           padding: '16px 20px 40px 20px',
           display: 'flex',
           alignItems: 'center',

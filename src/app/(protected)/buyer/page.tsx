@@ -4,11 +4,11 @@ import { BuyerHome } from '@/features/buyer/widgets/BuyerHome';
 import { BuyerFarmers } from '@/features/buyer/widgets/BuyerFarmers';
 import { BuyerProducts } from '@/features/buyer/widgets/BuyerProducts';
 import { BuyerMyPage } from '@/features/buyer/widgets/BuyerMyPage';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BottomNav, BottomNavTab } from '@/components/BottomNav';
 import SectionContainer from '@/components/SectionContainer';
 import { AppHeader } from '@/components/AppHeader';
-import { VStack, Box } from '@vapor-ui/core';
+import { Box } from '@vapor-ui/core';
 
 const SCREENS: Record<BottomNavTab, React.ReactNode> = {
   home: <BuyerHome />,
@@ -19,18 +19,42 @@ const SCREENS: Record<BottomNavTab, React.ReactNode> = {
 
 const BuyerPage = () => {
   const [activeTab, setActiveTab] = useState<BottomNavTab>('home');
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTab]);
   return (
-    <Box $css={{ position: 'relative' }}>
-      <SectionContainer
+    <Box
+      $css={{
+        position: 'relative',
+        height: '100dvh',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
+      <Box
         $css={{
-          marginBottom: '80px',
+          flex: 0,
+          overflow: 'visible',
+          paddingLeft: '20px',
+          paddingRight: '20px',
         }}
       >
-        <VStack>
-          <AppHeader />
+        <AppHeader />
+      </Box>
+      <Box
+        $css={{
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+          paddingBottom: '80px',
+        }}
+      >
+        <SectionContainer $css={{ marginBottom: 0 }} pt={false}>
           {SCREENS[activeTab]}
-        </VStack>
-      </SectionContainer>
+        </SectionContainer>
+      </Box>
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
     </Box>
   );

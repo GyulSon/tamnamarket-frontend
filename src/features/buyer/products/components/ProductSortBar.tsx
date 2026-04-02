@@ -1,5 +1,5 @@
 import { HStack, Text, Box } from '@vapor-ui/core';
-import { Icon } from '@iconify/react';
+import { PresetOutlineIcon } from '@vapor-ui/icons';
 
 type SortOption = '최신순' | '인기순' | '낮은가격순' | '높은가격순';
 
@@ -16,21 +16,25 @@ export function ProductSortBar({
   selected = '최신순',
   onChange,
 }: ProductSortBarProps) {
+  const handleSortClick = () => {
+    const currentIndex = OPTIONS.indexOf(selected);
+    const nextIndex = (currentIndex + 1) % OPTIONS.length;
+    onChange?.(OPTIONS[nextIndex]);
+  };
+
   return (
     <HStack
       $css={{
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingLeft: '$250',
-        paddingRight: '$250',
         paddingTop: '$100',
         paddingBottom: '$100',
       }}
     >
-      <Text typography="body4" foreground="hint-100">
+      <Text typography="heading5" $css={{ fontWeight: '700' }}>
         총{' '}
         <Text
-          typography="body4"
+          typography="heading5"
           $css={{ color: 'var(--vapor-color-orange-500)', fontWeight: '700' }}
         >
           {total}
@@ -38,47 +42,26 @@ export function ProductSortBar({
         개
       </Text>
 
-      <HStack $css={{ gap: '$075', overflowX: 'auto' }}>
-        {OPTIONS.map((option) => {
-          const active = selected === option;
-          return (
-            <Box
-              key={option}
-              render={<button onClick={() => onChange?.(option)} />}
-              $css={{
-                background: 'none',
-                border: 'none',
-                padding: '$000',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '2px',
-              }}
-            >
-              {active && (
-                <Icon
-                  icon="lucide:check"
-                  width={12}
-                  height={12}
-                  color="var(--vapor-color-orange-500)"
-                />
-              )}
-              <Text
-                typography="body4"
-                $css={{
-                  fontWeight: active ? '700' : '400',
-                  color: active
-                    ? 'var(--vapor-color-orange-500)'
-                    : 'var(--vapor-color-gray-500)',
-                  whiteSpace: 'nowrap',
-                }}
-              >
-                {option}
-              </Text>
-            </Box>
-          );
-        })}
-      </HStack>
+      <Box
+        render={<button onClick={handleSortClick} />}
+        $css={{
+          background: 'none',
+          border: 'none',
+          padding: '$000',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '$050',
+        }}
+      >
+        <PresetOutlineIcon width="16" height="16" style={{ color: '#000' }} />
+        <Text
+          typography="subtitle2"
+          $css={{ color: '#000', fontWeight: '500' }}
+        >
+          {selected}
+        </Text>
+      </Box>
     </HStack>
   );
 }

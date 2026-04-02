@@ -1,15 +1,13 @@
 import { HStack, Box, Text } from '@vapor-ui/core';
-import { Icon } from '@iconify/react';
 
-type Category = '전체' | '감귤류' | '채소' | '해산물' | '과일' | '곡물';
+type Category = '전체' | '감귤류' | '우도 땅콩' | '고사리' | '구좌 당근';
 
-const CATEGORIES: { id: Category; icon: string }[] = [
-  { id: '전체', icon: 'lucide:layout-grid' },
-  { id: '감귤류', icon: 'lucide:citrus' },
-  { id: '채소', icon: 'lucide:leaf' },
-  { id: '해산물', icon: 'lucide:fish' },
-  { id: '과일', icon: 'lucide:apple' },
-  { id: '곡물', icon: 'lucide:wheat' },
+const CATEGORIES: Category[] = [
+  '전체',
+  '감귤류',
+  '우도 땅콩',
+  '고사리',
+  '구좌 당근',
 ];
 
 interface ProductCategoryChipsProps {
@@ -25,60 +23,40 @@ export function ProductCategoryChips({
     <HStack
       $css={{
         gap: '$075',
-        paddingLeft: '$250',
-        paddingRight: '$250',
         paddingTop: '$150',
         paddingBottom: '$075',
         overflowX: 'auto',
         flexShrink: '0',
       }}
+      className="hide-scrollbar"
     >
-      {CATEGORIES.map(({ id, icon }) => {
-        const active = selected === id;
+      {CATEGORIES.map((category) => {
+        const active = selected === category;
         return (
           <Box
-            key={id}
-            render={<button onClick={() => onChange?.(id)} />}
+            key={category}
+            render={<button onClick={() => onChange?.(category)} />}
             $css={{
-              paddingTop: '$075',
-              paddingBottom: '$075',
-              paddingLeft: '$125',
-              paddingRight: '$125',
-              borderRadius: '$900',
-              border: active
-                ? '1.5px solid var(--vapor-color-orange-500)'
-                : '1.5px solid var(--vapor-color-border-normal)',
-              backgroundColor: active
-                ? 'var(--vapor-color-orange-50)'
-                : '$white',
+              width: '80px',
+              height: '44px',
+              borderBottom: active ? '2px solid #000' : 'none',
+              backgroundColor: '$basic-white',
               cursor: 'pointer',
               flexShrink: '0',
               display: 'flex',
+              justifyContent: 'center',
               alignItems: 'center',
-              gap: '4px',
             }}
           >
-            <Icon
-              icon={icon}
-              width={14}
-              height={14}
-              color={
-                active
-                  ? 'var(--vapor-color-orange-500)'
-                  : 'var(--vapor-color-gray-600)'
-              }
-            />
             <Text
-              typography="body4"
+              typography="heading6"
               $css={{
                 fontWeight: active ? '700' : '500',
-                color: active
-                  ? 'var(--vapor-color-orange-500)'
-                  : 'var(--vapor-color-gray-600)',
+                color: active ? '#000' : '#4C4C4C',
                 whiteSpace: 'nowrap',
               }}
             >
-              {id}
+              {category}
             </Text>
           </Box>
         );
