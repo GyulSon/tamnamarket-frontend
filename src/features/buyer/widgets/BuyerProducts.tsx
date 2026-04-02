@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Box, Text, VStack } from '@vapor-ui/core';
+import { useBuyerStore } from '@/store/buyerStore';
 import {
   ProductSearchBar,
   ProductCategoryChips,
@@ -104,7 +105,7 @@ function filterAndSort(
 }
 
 export function BuyerProducts() {
-  const [category, setCategory] = useState<Category>('전체');
+  const { category, setCategory } = useBuyerStore();
   const [sort, setSort] = useState<SortOption>('최신순');
 
   const filtered = filterAndSort(MOCK_PRODUCTS, category, sort);

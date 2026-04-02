@@ -41,7 +41,7 @@ export default function OnboardingThird() {
           overflow: 'hidden',
         }}
       >
-        <VStack style={{ gap: '60px' }}>
+        <VStack style={{ gap: '60px', flex: 1, overflow: 'auto' }}>
           {/* 상단 타이틀 섹션 */}
           <VStack style={{ gap: '8px' }}>
             <Text
@@ -119,6 +119,7 @@ export default function OnboardingThird() {
                   position: 'relative',
                   width: '60px',
                   height: '60px',
+                  minHeight: '60px',
                   flexShrink: 0,
                 }}
               >
@@ -180,6 +181,7 @@ export default function OnboardingThird() {
                   position: 'relative',
                   width: '60px',
                   height: '60px',
+                  minHeight: '60px',
                   flexShrink: 0,
                 }}
               >
@@ -218,14 +220,15 @@ export default function OnboardingThird() {
         </VStack>
 
         {/* 하단 버튼 */}
-        <Button
-          size="xl"
+        <button
           onClick={handleStartClick}
           disabled={!selectedRole}
           style={{
             width: '100%',
             backgroundColor: '#FF761B',
             marginBottom: '40px',
+            minHeight: '48px',
+            flexShrink: 0,
           }}
         >
           <Text
@@ -237,7 +240,7 @@ export default function OnboardingThird() {
           >
             탐라장터 시작하기
           </Text>
-        </Button>
+        </button>
       </Box>
     </Box>
   );

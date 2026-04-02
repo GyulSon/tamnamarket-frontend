@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Box, IconButton, VStack } from '@vapor-ui/core';
+import { useBuyerStore } from '@/store/buyerStore';
 import {
   CategoryList,
   SectionHeader,
@@ -68,6 +69,7 @@ const MOCK_FARMERS = [
 
 export function BuyerHome() {
   const router = useRouter();
+  const { setActiveTab } = useBuyerStore();
   const [likedProducts, setLikedProducts] = useState<Set<string>>(new Set());
 
   const toggleLike = (id: string) => {
@@ -175,7 +177,7 @@ export function BuyerHome() {
           <SectionHeader
             title="방금 수확했어요!"
             subtitle="신선한 제주 산지 직송 신상품이에요"
-            onMoreClick={() => {}}
+            onMoreClick={() => setActiveTab('products')}
           />
           <Box $css={{ display: 'flex', gap: '$150', overflowX: 'auto' }}>
             {MOCK_PRODUCTS.map((product) => (
@@ -240,7 +242,7 @@ export function BuyerHome() {
           <SectionHeader
             title="동네 인기 농부들"
             subtitle="단골이 많은 농부님들을 만나보세요"
-            onMoreClick={() => {}}
+            onMoreClick={() => setActiveTab('farmers')}
           />
           <VStack $css={{ gap: '$200' }}>
             {MOCK_FARMERS.map((farmer) => (
