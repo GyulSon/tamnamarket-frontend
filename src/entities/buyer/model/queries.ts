@@ -1,31 +1,35 @@
 'use client';
 
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
+import { mainscreenApi } from '../api/mainscreen.api';
+import { farmerApi } from '../api/farmer.api';
+import type { ApiResponse } from '@/lib/api/types';
+import type { MainscreenProduct, FarmerDetail } from './types';
 
-import { testApi } from '@/entities/buyer/api/auth.api';
-
-type UseMutationCallback = {
-  onSuccess?: () => void;
-  onError?: () => void;
-  onMutate?: () => void;
-  onSettled?: () => void;
+export const mainscreenKeys = {
+  all: ['mainscreen'] as const,
+  content: (buyerId: number) =>
+    [...mainscreenKeys.all, 'content', buyerId] as const,
 };
 
-export const authKeys = {
-  all: ['auth'],
-  logout: () => [...authKeys.all, 'logout'],
+export const farmerKeys = {
+  all: ['farmer'] as const,
+  detail: (sellerId: number) =>
+    [...farmerKeys.all, 'detail', sellerId] as const,
 };
 
-export const useLogout = (callbacks?: UseMutationCallback) => {
-  const queryClient = useQueryClient();
+/** 5. 메인 화면 목록 조회 */
+export const useMainscreenContent = (buyerId: number) => {
+  return useQuery<ApiResponse<MainscreenProduct[]>>({
+    queryKey: mainscreenKeys.content(buyerId),
+    queryFn: () => mainscreenApi.getContent(buyerId),
+  });
+};
 
-  return useMutation({
-    mutationFn: testApi.logout,
-    onSuccess: () => {
-      queryClient.clear();
-      localStorage.clear();
-      sessionStorage.clear();
-      if (callbacks?.onSuccess) callbacks.onSuccess();
-    },
+/** 6. 농부 프로필 상세 조회 */
+export const useFarmerDetail = (sellerId: number) => {
+  return useQuery<ApiResponse<FarmerDetail>>({
+    queryKey: farmerKeys.detail(sellerId),
+    queryFn: () => farmerApi.getDetail(sellerId),
   });
 };
