@@ -45,8 +45,10 @@ export default function OnboardingThird() {
           {/* 상단 타이틀 섹션 */}
           <VStack style={{ gap: '8px' }}>
             <Text
+              typography="heading6"
               style={{
                 color: '#FF761B',
+                fontFamily: "'Jalnan2'",
                 fontSize: '14px',
                 fontWeight: '400',
                 lineHeight: '1.3',
@@ -58,9 +60,11 @@ export default function OnboardingThird() {
 
             <Text
               style={{
+                fontFamily: "'Jalnan2'",
                 fontSize: '28px',
-                fontWeight: '700',
+                fontWeight: '400',
                 lineHeight: '1.4',
+                letterSpacing: '-0.1px',
                 color: '#000000',
               }}
             >
