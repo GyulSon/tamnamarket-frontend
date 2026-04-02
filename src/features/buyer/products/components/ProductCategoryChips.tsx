@@ -17,7 +17,10 @@ interface ProductCategoryChipsProps {
   onChange?: (category: Category) => void;
 }
 
-export function ProductCategoryChips({ selected = '전체', onChange }: ProductCategoryChipsProps) {
+export function ProductCategoryChips({
+  selected = '전체',
+  onChange,
+}: ProductCategoryChipsProps) {
   return (
     <HStack
       $css={{
@@ -27,7 +30,6 @@ export function ProductCategoryChips({ selected = '전체', onChange }: ProductC
         paddingTop: '$150',
         paddingBottom: '$075',
         overflowX: 'auto',
-        scrollbarWidth: 'none',
         flexShrink: '0',
       }}
     >
@@ -46,7 +48,9 @@ export function ProductCategoryChips({ selected = '전체', onChange }: ProductC
               border: active
                 ? '1.5px solid var(--vapor-color-orange-500)'
                 : '1.5px solid var(--vapor-color-border-normal)',
-              backgroundColor: active ? 'var(--vapor-color-orange-50)' : '$white',
+              backgroundColor: active
+                ? 'var(--vapor-color-orange-50)'
+                : '$white',
               cursor: 'pointer',
               flexShrink: '0',
               display: 'flex',
@@ -58,7 +62,11 @@ export function ProductCategoryChips({ selected = '전체', onChange }: ProductC
               icon={icon}
               width={14}
               height={14}
-              color={active ? 'var(--vapor-color-orange-500)' : 'var(--vapor-color-gray-600)'}
+              color={
+                active
+                  ? 'var(--vapor-color-orange-500)'
+                  : 'var(--vapor-color-gray-600)'
+              }
             />
             <Text
               typography="body4"
