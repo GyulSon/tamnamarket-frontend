@@ -83,6 +83,21 @@ const MainPage = () => {
             >
               <Text typography="body2">서브2 페이지로 이동 👉</Text>
             </Box>
+            <Box
+              render={<Link href="/seller" />}
+              $css={{
+                display: 'block',
+                padding: '$150',
+                borderWidth: '1px',
+                borderStyle: 'solid',
+                borderColor: 'var(--border)',
+                borderRadius: '12px',
+                textDecoration: 'none',
+                color: 'inherit',
+              }}
+            >
+              <Text typography="body2">판매자페이지 이동</Text>
+            </Box>
           </VStack>
         </Card.Body>
       </Card.Root>

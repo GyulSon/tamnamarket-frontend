@@ -2,19 +2,19 @@ import { Text, VStack } from '@vapor-ui/core';
 
 import SectionContainer from '@/components/SectionContainer';
 
-const Sub2Page = () => {
+const BuyerPage = () => {
   return (
     <SectionContainer>
       <VStack $css={{ gap: '$150' }}>
         <Text render={<h1 />} typography="heading5">
-          서브2
+          구매자 페이지
         </Text>
         <Text typography="body2" $css={{ color: 'var(--muted-foreground)' }}>
-          서브2 페이지입니다.
+          구매자 페이지입니다.
         </Text>
       </VStack>
     </SectionContainer>
   );
 };
 
-export default Sub2Page;
+export default BuyerPage;
