@@ -1,5 +1,6 @@
 import { HStack, Box, Text } from '@vapor-ui/core';
 import { Icon } from '@iconify/react';
+import { SearchOutlineIcon } from '@vapor-ui/icons';
 
 interface ProductSearchBarProps {
   placeholder?: string;
@@ -7,29 +8,36 @@ interface ProductSearchBarProps {
 }
 
 export function ProductSearchBar({
-  placeholder = '찾으시는 농산물을 검색해보세요',
+  placeholder = '지금 가장 맛있는 청귤 검색',
   onClick,
 }: ProductSearchBarProps) {
   return (
-    <Box $css={{ paddingLeft: '$250', paddingRight: '$250', paddingTop: '$150' }}>
+    <Box $css={{ paddingTop: '$150' }}>
       <HStack
         render={<button onClick={onClick} />}
         $css={{
           gap: '$100',
           alignItems: 'center',
-          backgroundColor: '$canvas-200',
+          backgroundColor: '$basic-white',
+
           borderRadius: '$300',
-          paddingTop: '$125',
-          paddingBottom: '$125',
+          paddingTop: '$150',
+          paddingBottom: '$150',
           paddingLeft: '$150',
           paddingRight: '$150',
           width: '100%',
-          border: 'none',
+          border: '1px solid #E0E0E0',
           cursor: 'pointer',
         }}
       >
-        <Icon icon="lucide:search" width={18} height={18} color="var(--vapor-color-gray-500)" />
-        <Text typography="body3" foreground="hint-100">
+        <SearchOutlineIcon width={20.5} height={20.5} color="#000" />
+        <Text
+          typography="heading6"
+          foreground="hint-100"
+          $css={{
+            fontWeight: 500,
+          }}
+        >
           {placeholder}
         </Text>
       </HStack>

@@ -2,7 +2,6 @@
 
 import Image from 'next/image';
 import { Box, HStack, VStack, Text } from '@vapor-ui/core';
-import { AppHeader } from '../../../components/AppHeader';
 import {
   CreditCardOutlineIcon,
   HeartOutlineIcon,
@@ -26,22 +25,16 @@ export function BuyerMyPage() {
       $css={{
         backgroundColor: '$white',
         minHeight: '100dvh',
-        maxWidth: '375px',
-        marginLeft: 'auto',
-        marginRight: 'auto',
         position: 'relative',
       }}
     >
       <VStack $css={{ paddingBottom: '84px' }}>
-
         {/* 프로필 섹션 */}
         <HStack
           $css={{
             gap: '$150',
-            paddingLeft: '$250',
-            paddingRight: '$250',
-            paddingTop: '$200',
-            paddingBottom: '$200',
+            paddingTop: '$300',
+            paddingBottom: '$300',
             alignItems: 'flex-start',
           }}
         >
@@ -51,7 +44,7 @@ export function BuyerMyPage() {
               width: '60px',
               height: '60px',
               backgroundColor: '$gray-200',
-              borderRadius: '$300',
+              borderRadius: '$900',
               overflow: 'hidden',
               flexShrink: '0',
               position: 'relative',
@@ -74,16 +67,20 @@ export function BuyerMyPage() {
               justifyContent: 'space-between',
             }}
           >
-            <VStack $css={{ gap: '$025' }}>
+            <VStack>
               <Text
-                typography="body2"
+                typography="heading4"
                 foreground="normal-200"
                 $css={{ fontWeight: '700' }}
               >
                 김지훈 님
               </Text>
-              <Text typography="body4" foreground="hint-100">
-                카카오 계정으로 로그인
+              <Text
+                typography="subtitle1"
+                foreground="hint-100"
+                $css={{ fontWeight: '500' }}
+              >
+                구매자 계정
               </Text>
             </VStack>
             <Box
@@ -93,32 +90,34 @@ export function BuyerMyPage() {
                 paddingBottom: '$075',
                 paddingLeft: '$150',
                 paddingRight: '$150',
-                backgroundColor: '$canvas-100',
-                borderRadius: '$200',
+                backgroundColor: '#FF761B',
+                borderRadius: '$300',
                 border: 'none',
                 cursor: 'pointer',
               }}
             >
               <Text
-                typography="body4"
+                typography="subtitle1"
                 $css={{
-                  color: 'var(--vapor-color-orange-500)',
-                  fontWeight: '600',
+                  color: '#ffffff',
+                  fontWeight: '500',
+                  letterSpacing: '-0.1px',
+                  fontSize: '14px',
+                  lineHeight: '22px',
                 }}
               >
-                변경
+                프로필 수정
               </Text>
             </Box>
           </HStack>
         </HStack>
+        <Box $css={{ height: '4px', backgroundColor: '#F2F2F2' }} />
 
         {/* 메뉴 섹션 */}
         <VStack
           $css={{
             gap: '$000',
             paddingTop: '$100',
-            paddingLeft: '$250',
-            paddingRight: '$250',
             paddingBottom: '$100',
           }}
         >
@@ -132,24 +131,31 @@ export function BuyerMyPage() {
                   justifyContent: 'space-between',
                   alignItems: 'center',
                   width: '100%',
-                  paddingTop: '$150',
-                  paddingBottom: '$150',
+                  paddingTop: '$200',
+                  paddingBottom: '$200',
                   background: 'none',
                   border: 'none',
-                  borderBottom: '1px solid var(--vapor-color-border-normal)',
                   cursor: 'pointer',
                 }}
               >
-                <HStack $css={{ gap: '$100', alignItems: 'center' }}>
+                <HStack
+                  $css={{
+                    gap: '$100',
+                    alignItems: 'center',
+                  }}
+                >
                   <IconComponent
                     width={20}
                     height={20}
                     style={{ color: 'var(--vapor-color-gray-600)' }}
                   />
                   <Text
-                    typography="body3"
+                    typography="heading6"
                     foreground="normal-200"
-                    $css={{ fontWeight: '500' }}
+                    $css={{
+                      fontWeight: '500',
+                      color: '#000',
+                    }}
                   >
                     {item.label}
                   </Text>

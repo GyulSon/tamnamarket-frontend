@@ -12,7 +12,7 @@ export const ProductPrice = ({
   return (
     <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
       <Text
-        typography="body3"
+        typography="heading4"
         style={{
           color: '#FF7628',
         }}
@@ -20,7 +20,7 @@ export const ProductPrice = ({
         {currentPrice}
       </Text>
       <Text
-        typography="body3"
+        typography="subtitle1"
         style={{
           color: '#959595',
           textDecoration: 'line-through',

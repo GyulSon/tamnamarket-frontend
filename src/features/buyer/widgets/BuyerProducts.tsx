@@ -1,17 +1,25 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, VStack } from '@vapor-ui/core';
-import { AppHeader } from '../../../components/AppHeader';
+import { Box, Text, VStack } from '@vapor-ui/core';
 import {
   ProductSearchBar,
   ProductCategoryChips,
   ProductSortBar,
   ProductGridItem,
 } from '../products/components';
+import { InfoCircleIcon } from '@vapor-ui/icons';
 
-type Category = '전체' | '감귤류' | '채소' | '해산물' | '과일' | '곡물';
+type Category = '전체' | '감귤류' | '우도 땅콩' | '고사리' | '구좌 당근';
 type SortOption = '최신순' | '인기순' | '낮은가격순' | '높은가격순';
+
+const CATEGORY_DESCRIPTIONS: Record<Category, string> = {
+  '전체': '',
+  '감귤류': '화산토와 해풍이 빚은, 제주만의 새콤달콤한 햇귤',
+  '우도 땅콩': '우도의 화산 모래밭에서 자라 유독 고소한 섬땅콩',
+  '고사리': '청정 제주 오름에서 자란 향 깊은 봄나물',
+  '구좌 당근': '겨울 바닷바람 맞고 자라 당도가 남다른 대표 작물',
+};
 
 const MOCK_PRODUCTS = [
   {
@@ -76,6 +84,7 @@ const MOCK_PRODUCTS = [
   },
 ];
 
+
 function filterAndSort(
   products: typeof MOCK_PRODUCTS,
   category: Category,
@@ -105,14 +114,11 @@ export function BuyerProducts() {
       $css={{
         backgroundColor: '$canvas-100',
         minHeight: '100dvh',
-        maxWidth: '375px',
         paddingTop: '$150',
-        marginLeft: 'auto',
-        marginRight: 'auto',
         position: 'relative',
       }}
     >
-      <VStack $css={{ paddingBottom: '84px', overflow: 'auto' }}>
+      <VStack $css={{ overflow: 'auto' }}>
         <ProductSearchBar />
         <ProductCategoryChips selected={category} onChange={setCategory} />
         <ProductSortBar
@@ -120,14 +126,40 @@ export function BuyerProducts() {
           selected={sort}
           onChange={setSort}
         />
+        {category !== '전체' && (
+          <Box
+            $css={{
+              display: 'flex',
+              justifyContent: 'start',
+              alignItems: 'center',
+              padding: '$150',
+              borderRadius: '$600',
+              border: '1px solid #FF761B',
+              backgroundColor: '#FFF0E5',
+              gap: '$100',
+            }}
+          >
+            <InfoCircleIcon style={{ color: '#FF761B' }} />
+            <Text
+              typography="subtitle1"
+              $css={{
+                color: '#FF761B',
+                fontWeight: '500',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {CATEGORY_DESCRIPTIONS[category]}
+            </Text>
+          </Box>
+        )}
         <Box
           $css={{
             display: 'grid',
             gridTemplateColumns: 'repeat(2, 1fr)',
             gap: '$200',
-            paddingLeft: '$250',
-            paddingRight: '$250',
-            paddingTop: '$100',
+            paddingTop: '$150',
           }}
         >
           {filtered.map((product) => (
