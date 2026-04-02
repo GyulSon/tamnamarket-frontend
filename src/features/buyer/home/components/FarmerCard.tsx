@@ -12,6 +12,7 @@ interface FarmerCardProps {
   location?: string;
   description?: string;
   percent?: number;
+  radius?: boolean;
   totalSellCnt?: number;
   onClick?: () => void;
 }
@@ -23,6 +24,7 @@ export function FarmerCard({
   description,
   percent,
   totalSellCnt,
+  radius = false,
   onClick,
 }: FarmerCardProps) {
   return (
@@ -39,19 +41,45 @@ export function FarmerCard({
       }}
     >
       {/* 농부 프로필 이미지 */}
-      <Box
-        $css={{
-          width: '88px',
-          height: '88px',
-          backgroundColor: '$gray-200',
-          borderRadius: '$400',
-          overflow: 'hidden',
-          flexShrink: '0',
-          position: 'relative',
-        }}
-      >
-        <Image src={imageUrl} alt={name} fill style={{ objectFit: 'cover' }} />
-      </Box>
+      {radius ? (
+        <Box
+          $css={{
+            width: '48px',
+            height: '48px',
+            backgroundColor: '$gray-200',
+            borderRadius: '$800',
+            overflow: 'hidden',
+            flexShrink: '0',
+            position: 'relative',
+          }}
+        >
+          <Image
+            src={imageUrl}
+            alt={name}
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        </Box>
+      ) : (
+        <Box
+          $css={{
+            width: '88px',
+            height: '88px',
+            backgroundColor: '$gray-200',
+            borderRadius: '$400',
+            overflow: 'hidden',
+            flexShrink: '0',
+            position: 'relative',
+          }}
+        >
+          <Image
+            src={imageUrl}
+            alt={name}
+            fill
+            style={{ objectFit: 'cover' }}
+          />
+        </Box>
+      )}
 
       {/* 농부 정보 */}
       <VStack
@@ -59,7 +87,7 @@ export function FarmerCard({
           gap: '$100',
           flex: '1',
           alignItems: 'flex-start',
-          padding: '$100',
+          padding: radius ? '$000' : '$100',
         }}
       >
         {/* 농부 이름 + 화살표 */}

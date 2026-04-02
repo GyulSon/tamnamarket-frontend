@@ -7,30 +7,6 @@ interface ImageCarouselProps {
 export const ImageCarousel = ({ images }: ImageCarouselProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const [isDragging, setIsDragging] = useState(false);
-  const [startX, setStartX] = useState(0);
-  const [scrollLeft, setScrollLeft] = useState(0);
-
-  const handleMouseDown = (e: React.MouseEvent) => {
-    setIsDragging(true);
-    setStartX(e.pageX - (scrollContainerRef.current?.offsetLeft || 0));
-    setScrollLeft(scrollContainerRef.current?.scrollLeft || 0);
-  };
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDragging) return;
-    e.preventDefault();
-    const x = e.pageX - (scrollContainerRef.current?.offsetLeft || 0);
-    const walk = (x - startX) * 1; // scroll-fast
-    const container = scrollContainerRef.current;
-    if (container) {
-      container.scrollLeft = scrollLeft - walk;
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsDragging(false);
-  };
 
   const handleScroll = () => {
     const container = scrollContainerRef.current;
@@ -61,17 +37,17 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
       {/* 이미지 스크롤 컨테이너 */}
       <div
         ref={scrollContainerRef}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        onMouseLeave={handleMouseUp}
+        onScroll={handleScroll}
         style={{
           display: 'flex',
-          overflow: 'hidden',
+          overflowX: 'scroll',
+          scrollSnapType: 'x mandatory',
+          scrollBehavior: 'smooth',
+          WebkitOverflowScrolling: 'touch',
+          msOverflowStyle: 'none',
+          scrollbarWidth: 'none',
           width: '100%',
           aspectRatio: '1',
-          scrollBehavior: 'smooth',
-          cursor: isDragging ? 'grabbing' : 'grab',
           userSelect: 'none',
         }}
       >
@@ -85,6 +61,8 @@ export const ImageCarousel = ({ images }: ImageCarouselProps) => {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
+              scrollSnapAlign: 'start',
+              boxSizing: 'border-box',
             }}
           >
             <img

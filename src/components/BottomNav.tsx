@@ -25,8 +25,12 @@ function TabIcon({ icon, active }: { icon: string; active: boolean }) {
         <Image
           src="/images/icons/haton.svg"
           alt={icon}
-          width={36}
-          height={36}
+          width={28
+            
+          }
+          height={28
+            
+          }
           style={{ color }}
         />
       );
@@ -35,8 +39,12 @@ function TabIcon({ icon, active }: { icon: string; active: boolean }) {
         <Image
           src="/images/icons/hatoff.svg"
           alt={icon}
-          width={36}
-          height={36}
+          width={28
+            
+          }
+          height={28
+            
+          }
           style={{ color }}
         />
       );
@@ -47,8 +55,12 @@ function TabIcon({ icon, active }: { icon: string; active: boolean }) {
         <Image
           src="/images/icons/vegaon.svg"
           alt={icon}
-          width={36}
-          height={36}
+          width={28
+            
+          }
+          height={28
+            
+          }
           style={{ color }}
         />
       );
@@ -57,16 +69,24 @@ function TabIcon({ icon, active }: { icon: string; active: boolean }) {
         <Image
           src="/images/icons/vegaoff.svg"
           alt={icon}
-          width={36}
-          height={36}
+          width={28
+            
+          }
+          height={28
+            
+          }
           style={{ color }}
         />
       );
     }
   } else if (icon.includes('home')) {
-    return <HomeOutlineIcon width="36" height="36" style={{ color }} />;
+    return <HomeOutlineIcon width="28
+    " height="28
+    " style={{ color }} />;
   }
-  return <UserOutlineIcon width="36" height="36" style={{ color }} />;
+  return <UserOutlineIcon width="28
+  " height="28
+  " style={{ color }} />;
 }
 
 export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
@@ -108,12 +128,10 @@ export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
           >
             <TabIcon icon={tab.icon} active={active} />
             <Text
-              typography="body3"
+              typography="subtitle1"
               $css={{
                 fontWeight: '500',
-                color: active
-                  ? 'var(--vapor-color-orange-500)'
-                  : 'var(--vapor-color-gray-500)',
+                color: active ? '#FF761B' : '#959595',
               }}
             >
               {tab.label}
