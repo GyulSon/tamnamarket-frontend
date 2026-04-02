@@ -58,8 +58,8 @@ const ImageAnalyzingStep = ({ previewUrl }: ImageAnalyzingStepProps) => {
         <Box
           $css={{
             position: 'relative',
-            width: '124px',
-            height: '88px',
+            width: '120px',
+            height: '120px',
           }}
         >
           <Image
@@ -77,6 +77,7 @@ const ImageAnalyzingStep = ({ previewUrl }: ImageAnalyzingStepProps) => {
             foreground="white"
             $css={{
               textAlign: 'center',
+              fontSize: 'var(--vapor-typography-fontSize-100)',
               opacity: 0.72,
             }}
           >
@@ -87,6 +88,7 @@ const ImageAnalyzingStep = ({ previewUrl }: ImageAnalyzingStepProps) => {
             foreground="white"
             $css={{
               textAlign: 'center',
+              fontSize: 'var(--vapor-typography-fontSize-400)',
               fontWeight: 700,
             }}
           >

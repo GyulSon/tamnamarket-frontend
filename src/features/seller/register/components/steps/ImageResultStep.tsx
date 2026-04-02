@@ -31,7 +31,7 @@ const ImageResultStep = ({
         flexDirection: 'column',
         boxSizing: 'border-box',
         backgroundColor: '#ffffff',
-        paddingTop: '24px',
+        paddingTop: '22px',
         paddingBottom: '34px',
         paddingLeft: '20px',
         paddingRight: '20px',
@@ -40,7 +40,7 @@ const ImageResultStep = ({
       <VStack
         $css={{
           flex: 1,
-          gap: '32px',
+          gap: '48px',
         }}
       >
         <button
@@ -75,22 +75,41 @@ const ImageResultStep = ({
                 $css={{
                   color: '#6b7280',
                   fontWeight: 600,
+                  fontSize: 'var(--vapor-typography-fontSize-100)',
                 }}
               >
                 이미지 분석 결과
               </Text>
-              <Text
-                typography="heading3"
-                $css={{
-                  color: hasError ? '#dc2626' : '#ff7a2f',
-                  fontWeight: 700,
-                  lineHeight: 1.25,
-                }}
-              >
-                {hasError
-                  ? '결과를 확인하지 못했어요'
-                  : `${resultLabel}로 인식했어요`}
-              </Text>
+              {hasError ? (
+                <Text
+                  typography="heading3"
+                  $css={{
+                    color: '#dc2626',
+                    fontSize: 'var(--vapor-typography-fontSize-500)',
+                    fontWeight: 700,
+                    lineHeight: 1.25,
+                  }}
+                >
+                  결과를 확인하지 못했어요
+                </Text>
+              ) : (
+                <Text
+                  typography="heading3"
+                  $css={{
+                    margin: 0,
+                    fontSize: 'var(--vapor-typography-fontSize-500)',
+                    fontWeight: 700,
+                    lineHeight: 1.25,
+                  }}
+                >
+                  <span style={{ color: '#ff7a2f' }}>
+                    {resultLabel}
+                  </span>
+                  <span style={{ color: '#111111' }}>
+                    로 인식했어요
+                  </span>
+                </Text>
+              )}
             </VStack>
 
             <Box
@@ -139,6 +158,7 @@ const ImageResultStep = ({
                 color: '#5b5b5b',
                 textAlign: 'center',
                 fontWeight: 600,
+                fontSize: 'var(--vapor-typography-fontSize-100)',
               }}
             >
               인식한 특산품이 맞나요?

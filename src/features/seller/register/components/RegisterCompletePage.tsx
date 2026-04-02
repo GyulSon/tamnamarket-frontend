@@ -25,10 +25,7 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
       <VStack
         $css={{
           width: '100%',
-          maxWidth: '1280px',
           minHeight: '100dvh',
-          marginLeft: 'auto',
-          marginRight: 'auto',
           paddingTop: '104px',
           paddingBottom: '24px',
           paddingLeft: '20px',
