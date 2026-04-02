@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Box, VStack, Text, Tabs } from '@vapor-ui/core';
-import { AppHeader } from '../home/components/AppHeader';
+import { AppHeader } from '../../../components/AppHeader';
 import { FarmerCard } from '../farmers/components';
 
 type FilterOption = '전체' | '재구매율 높은' | '판매 많은' | '신규 농부';

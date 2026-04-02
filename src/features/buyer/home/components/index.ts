@@ -1,4 +1,4 @@
-export { AppHeader } from './AppHeader';
+export { AppHeader } from '../../../../components/AppHeader';
 export { HeroBanner } from './HeroBanner';
 export { CategoryList } from './CategoryList';
 export { SectionHeader } from './SectionHeader';

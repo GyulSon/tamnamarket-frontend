@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { Box, HStack, VStack, Text } from '@vapor-ui/core';
-import { AppHeader } from '../home/components/AppHeader';
+import { AppHeader } from '../../../components/AppHeader';
 import {
   CreditCardOutlineIcon,
   HeartOutlineIcon,
@@ -68,9 +68,20 @@ export function BuyerMyPage() {
           </Box>
 
           {/* 사용자 정보 + 버튼 */}
-          <HStack $css={{ gap: '$150', flex: '1', alignItems: 'center', justifyContent: 'space-between' }}>
+          <HStack
+            $css={{
+              gap: '$150',
+              flex: '1',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}
+          >
             <VStack $css={{ gap: '$025' }}>
-              <Text typography="body2" foreground="normal-200" $css={{ fontWeight: '700' }}>
+              <Text
+                typography="body2"
+                foreground="normal-200"
+                $css={{ fontWeight: '700' }}
+              >
                 김지훈 님
               </Text>
               <Text typography="body4" foreground="hint-100">
@@ -90,7 +101,13 @@ export function BuyerMyPage() {
                 cursor: 'pointer',
               }}
             >
-              <Text typography="body4" $css={{ color: 'var(--vapor-color-orange-500)', fontWeight: '600' }}>
+              <Text
+                typography="body4"
+                $css={{
+                  color: 'var(--vapor-color-orange-500)',
+                  fontWeight: '600',
+                }}
+              >
                 변경
               </Text>
             </Box>
@@ -126,12 +143,24 @@ export function BuyerMyPage() {
                 }}
               >
                 <HStack $css={{ gap: '$100', alignItems: 'center' }}>
-                  <IconComponent width={20} height={20} style={{ color: 'var(--vapor-color-gray-600)' }} />
-                  <Text typography="body3" foreground="normal-200" $css={{ fontWeight: '500' }}>
+                  <IconComponent
+                    width={20}
+                    height={20}
+                    style={{ color: 'var(--vapor-color-gray-600)' }}
+                  />
+                  <Text
+                    typography="body3"
+                    foreground="normal-200"
+                    $css={{ fontWeight: '500' }}
+                  >
                     {item.label}
                   </Text>
                 </HStack>
-                <ChevronRightOutlineIcon width={20} height={20} style={{ color: 'var(--vapor-color-gray-500)' }} />
+                <ChevronRightOutlineIcon
+                  width={20}
+                  height={20}
+                  style={{ color: 'var(--vapor-color-gray-500)' }}
+                />
               </HStack>
             );
           })}
