@@ -1,5 +1,7 @@
 import { HStack, VStack, Text } from '@vapor-ui/core';
-import { Icon } from '@iconify/react';
+import Image from 'next/image';
+import { HomeOutlineIcon } from '@vapor-ui/icons';
+import { UserOutlineIcon } from '@vapor-ui/icons';
 
 export type BottomNavTab = 'home' | 'farmers' | 'products' | 'my';
 
@@ -9,18 +11,62 @@ interface BottomNavProps {
 }
 
 const TABS: { id: BottomNavTab; label: string; icon: string }[] = [
-  { id: 'home', label: '홈', icon: 'lucide:home' },
-  { id: 'farmers', label: '농부들', icon: 'lucide:users' },
-  { id: 'products', label: '특산품', icon: 'lucide:leaf' },
-  { id: 'my', label: '마이', icon: 'lucide:user' },
+  { id: 'home', label: '홈', icon: 'home' },
+  { id: 'products', label: '특산품', icon: '/images/icons/vega.svg' },
+  { id: 'farmers', label: '농부들', icon: '/images/icons/hat.svg' },
+  { id: 'my', label: '마이', icon: 'my' },
 ];
 
 function TabIcon({ icon, active }: { icon: string; active: boolean }) {
-  const color = active
-    ? 'var(--vapor-color-orange-500)'
-    : 'var(--vapor-color-gray-500)';
-
-  return <Icon icon={icon} width={28} height={28} style={{ color }} />;
+  const color = active ? '#FF761B' : '#959595';
+  if (icon.includes('hat')) {
+    if (active) {
+      return (
+        <Image
+          src="/images/icons/haton.svg"
+          alt={icon}
+          width={36}
+          height={36}
+          style={{ color }}
+        />
+      );
+    } else {
+      return (
+        <Image
+          src="/images/icons/hatoff.svg"
+          alt={icon}
+          width={36}
+          height={36}
+          style={{ color }}
+        />
+      );
+    }
+  } else if (icon.includes('vega')) {
+    if (active) {
+      return (
+        <Image
+          src="/images/icons/vegaon.svg"
+          alt={icon}
+          width={36}
+          height={36}
+          style={{ color }}
+        />
+      );
+    } else {
+      return (
+        <Image
+          src="/images/icons/vegaoff.svg"
+          alt={icon}
+          width={36}
+          height={36}
+          style={{ color }}
+        />
+      );
+    }
+  } else if (icon.includes('home')) {
+    return <HomeOutlineIcon width="36" height="36" style={{ color }} />;
+  }
+  return <UserOutlineIcon width="36" height="36" style={{ color }} />;
 }
 
 export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
