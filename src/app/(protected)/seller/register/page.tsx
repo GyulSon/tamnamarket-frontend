@@ -226,10 +226,7 @@ const SellerRegisterPage = () => {
       <Box
         $css={{
           width: '100%',
-          maxWidth: '1280px',
           minHeight: '100dvh',
-          marginLeft: 'auto',
-          marginRight: 'auto',
           overflowX: 'hidden',
           position: 'relative',
           backgroundColor: '#ffffff',

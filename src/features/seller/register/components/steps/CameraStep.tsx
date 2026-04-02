@@ -176,15 +176,12 @@ const CameraStep = ({ isActive, fileNames, onCapture }: CameraStepProps) => {
         $css={{
           position: 'relative',
           width: '100%',
-          maxWidth: '1280px',
           height: '100%',
           justifyContent: 'space-between',
           paddingTop: '52px',
           paddingBottom: '40px',
           paddingLeft: '20px',
           paddingRight: '20px',
-          marginLeft: 'auto',
-          marginRight: 'auto',
           boxSizing: 'border-box',
         }}
       >

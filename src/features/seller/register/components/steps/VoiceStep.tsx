@@ -548,15 +548,12 @@ const VoiceStep = ({
       <VStack
         $css={{
           width: '100%',
-          maxWidth: '1280px',
           minHeight: '100dvh',
           paddingTop: '24px',
           paddingBottom: '28px',
           paddingLeft: '16px',
           paddingRight: '16px',
           justifyContent: 'space-between',
-          marginLeft: 'auto',
-          marginRight: 'auto',
           boxSizing: 'border-box',
         }}
       >

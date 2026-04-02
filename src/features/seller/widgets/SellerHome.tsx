@@ -21,10 +21,7 @@ export function SellerHome() {
       <Box
         $css={{
           width: '100%',
-          maxWidth: '1280px',
           minHeight: '100svh',
-          marginLeft: 'auto',
-          marginRight: 'auto',
           position: 'relative',
           backgroundColor: '$white',
           boxSizing: 'border-box',
