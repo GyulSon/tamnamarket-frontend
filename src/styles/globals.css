@@ -5,10 +5,9 @@
 @import 'tailwindcss/utilities.css' layer(tw-utilities);
 
 @font-face {
-  font-family: 'CustomFont';
-  src: url('/fonts/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2')
-    format('woff2');
-  font-weight: normal;
+  font-family: 'Jalnan2';
+  src: url('/fonts/Jalnan2.otf') format('opentype');
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
@@ -61,7 +60,7 @@ body {
 
 body {
   font-family:
-    'CustomFont',
+    'var(--vapor-typography-fontFamily-sans)',
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',

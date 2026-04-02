@@ -14,12 +14,12 @@ export function AppHeader({ logo, children }: AppHeaderProps) {
       $css={{
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingBottom: '$150',
-        paddingTop: '$150',
+        paddingBottom: '12px',
+        paddingTop: '24px',
       }}
     >
       {logo ?? (
-        <Image src="/images/logo.png" alt="탐라장터" width={120} height={32} />
+        <Image src="/images/logo.png" alt="탐라장터" width={94} height={28} />
       )}
       <Box
         render={<button />}
