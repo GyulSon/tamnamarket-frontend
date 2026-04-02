@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import Image from 'next/image';
 import { Box, VStack, Text, IconButton } from '@vapor-ui/core';
 import { useRouter } from 'next/navigation';
@@ -22,6 +23,7 @@ export function ProductGridItem({
   price,
 }: ProductGridItemProps) {
   const router = useRouter();
+  const [liked, setLiked] = useState(false);
 
   const handleClick = () => {
     router.push('/buyer/products/1');
@@ -55,6 +57,10 @@ export function ProductGridItem({
         <IconButton
           shape="circle"
           aria-label="Like"
+          onClick={(e: React.MouseEvent) => {
+            e.stopPropagation();
+            setLiked((prev) => !prev);
+          }}
           $css={{
             position: 'absolute',
             top: '$075',
@@ -62,7 +68,12 @@ export function ProductGridItem({
             backgroundColor: '$basic-gray-800',
           }}
         >
-          <HeartIcon />
+          <HeartIcon
+            style={{
+              color: liked ? '#FF761B' : undefined,
+              fill: liked ? '#FF761B' : undefined,
+            }}
+          />
         </IconButton>
       </Box>
 

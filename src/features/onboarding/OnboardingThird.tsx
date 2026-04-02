@@ -37,7 +37,7 @@ export default function OnboardingThird() {
           flexDirection: 'column',
           flex: 1,
           justifyContent: 'space-between',
-          padding: '160px 20px 40px 20px',
+          padding: '106px 20px 40px 20px',
           overflow: 'hidden',
         }}
       >

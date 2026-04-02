@@ -14,11 +14,13 @@ interface FarmerCardProps {
   description?: string;
   percent?: number;
   radius?: boolean;
+  isFarmerDetail?: boolean;
   totalSellCnt?: number;
   onClick?: () => void;
 }
 
 export function FarmerCard({
+  isFarmerDetail = false,
   imageUrl = '/images/mock/buyer/product5.png',
   name = '농부 이름',
   location,
@@ -47,7 +49,9 @@ export function FarmerCard({
       }}
     >
       {/* 농부 프로필 이미지 */}
-      {radius ? (
+      {isFarmerDetail ? (
+        <></>
+      ) : radius ? (
         <Box
           $css={{
             width: '48px',
@@ -93,7 +97,7 @@ export function FarmerCard({
           gap: '$100',
           flex: '1',
           alignItems: 'flex-start',
-          padding: radius ? '$000' : '$100',
+          padding: radius ? '$000' : isFarmerDetail ? '$000' : '$100',
         }}
       >
         {/* 농부 이름 + 화살표 */}
@@ -105,14 +109,22 @@ export function FarmerCard({
             width: '100%',
           }}
         >
-          <Text typography="body1" $css={{ fontWeight: '800' }}>
-            {name}
-          </Text>
-          <ChevronRightOutlineIcon
-            width="24"
-            height="24"
-            style={{ color: '#000' }}
-          />
+          {isFarmerDetail ? (
+            <Text typography="heading3" $css={{ fontWeight: '800' }}>
+              {name}
+            </Text>
+          ) : (
+            <Text typography="body1" $css={{ fontWeight: '800' }}>
+              {name}
+            </Text>
+          )}
+          {!isFarmerDetail && (
+            <ChevronRightOutlineIcon
+              width="24"
+              height="24"
+              style={{ color: '#000' }}
+            />
+          )}
         </HStack>
 
         {/* 위치 + 설명 (뱃지) */}
