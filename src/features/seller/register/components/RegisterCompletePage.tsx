@@ -1,0 +1,125 @@
+'use client';
+
+import { Icon } from '@iconify/react';
+import Link from 'next/link';
+
+import { Box, Button, Text, VStack } from '@vapor-ui/core';
+
+type RegisterCompletePageProps = {
+  title?: string;
+};
+
+const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
+  const headingText = title?.trim()
+    ? `${title} 등록되었습니다`
+    : '특산물이 등록되었습니다';
+
+  return (
+    <Box
+      $css={{
+        width: '100%',
+        minHeight: '100dvh',
+        backgroundColor: '#ffffff',
+      }}
+    >
+      <VStack
+        $css={{
+          width: '100%',
+          maxWidth: '1280px',
+          minHeight: '100dvh',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          paddingTop: '104px',
+          paddingBottom: '24px',
+          paddingLeft: '20px',
+          paddingRight: '20px',
+          alignItems: 'stretch',
+          justifyContent: 'space-between',
+          boxSizing: 'border-box',
+        }}
+      >
+        <Box />
+
+        <VStack
+          $css={{
+            alignItems: 'center',
+            gap: '20px',
+          }}
+        >
+          <Box
+            $css={{
+              display: 'flex',
+              width: '48px',
+              height: '48px',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '999px',
+              backgroundColor: '#f68632',
+            }}
+          >
+            <Icon
+              icon="lucide:check"
+              width="28"
+              height="28"
+              color="#ffffff"
+            />
+          </Box>
+
+          <VStack
+            $css={{
+              alignItems: 'center',
+              gap: '8px',
+            }}
+          >
+            <Text
+              render={<h1 />}
+              typography="heading4"
+              $css={{
+                color: '#111111',
+                fontWeight: 800,
+                fontSize: '24px',
+                lineHeight: 1.35,
+                textAlign: 'center',
+                wordBreak: 'keep-all',
+              }}
+            >
+              {headingText}
+            </Text>
+
+            <Text
+              typography="body2"
+              $css={{
+                color: '#666666',
+                textAlign: 'center',
+                lineHeight: 1.5,
+                fontWeight: 600,
+                whiteSpace: 'pre-line',
+              }}
+            >
+              {'판매 완료 시 택배 픽업이\n자동으로 예약됩니다'}
+            </Text>
+          </VStack>
+        </VStack>
+
+        <Button
+          colorPalette="primary"
+          nativeButton={false}
+          render={<Link href="/seller" />}
+          $css={{
+            width: '100%',
+            maxWidth: '340px',
+            height: '48px',
+            borderRadius: '12px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            fontWeight: 700,
+          }}
+        >
+          홈 화면 바로가기
+        </Button>
+      </VStack>
+    </Box>
+  );
+};
+
+export default RegisterCompletePage;

@@ -4,6 +4,7 @@ import { Box, Button, Text, VStack } from '@vapor-ui/core';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 type CameraStepProps = {
+  isActive: boolean;
   fileNames: string[];
   onCapture: (payload: {
     file: File;
@@ -12,7 +13,7 @@ type CameraStepProps = {
   }) => void;
 };
 
-const CameraStep = ({ fileNames, onCapture }: CameraStepProps) => {
+const CameraStep = ({ isActive, fileNames, onCapture }: CameraStepProps) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -23,6 +24,10 @@ const CameraStep = ({ fileNames, onCapture }: CameraStepProps) => {
   const stopCameraStream = useCallback(() => {
     streamRef.current?.getTracks().forEach((track) => track.stop());
     streamRef.current = null;
+
+    if (videoRef.current) {
+      videoRef.current.srcObject = null;
+    }
   }, []);
 
   const startCameraStream = useCallback(async () => {
@@ -65,12 +70,20 @@ const CameraStep = ({ fileNames, onCapture }: CameraStepProps) => {
   }, [stopCameraStream]);
 
   useEffect(() => {
-    void startCameraStream();
+    if (isActive) {
+      setIsCapturing(false);
+      void startCameraStream();
+      return;
+    }
 
+    stopCameraStream();
+  }, [isActive, startCameraStream, stopCameraStream]);
+
+  useEffect(() => {
     return () => {
       stopCameraStream();
     };
-  }, [startCameraStream, stopCameraStream]);
+  }, [stopCameraStream]);
 
   const handleCapture = () => {
     const video = videoRef.current;
@@ -127,9 +140,12 @@ const CameraStep = ({ fileNames, onCapture }: CameraStepProps) => {
       $css={{
         position: 'relative',
         width: '100%',
-        minHeight: '100dvh',
+        height: '100dvh',
         backgroundColor: '#111111',
         overflow: 'hidden',
+        display: 'flex',
+        justifyContent: 'center',
+        boxSizing: 'border-box',
       }}
     >
       <video
@@ -159,12 +175,17 @@ const CameraStep = ({ fileNames, onCapture }: CameraStepProps) => {
       <VStack
         $css={{
           position: 'relative',
-          minHeight: '100dvh',
+          width: '100%',
+          maxWidth: '1280px',
+          height: '100%',
           justifyContent: 'space-between',
           paddingTop: '52px',
           paddingBottom: '40px',
           paddingLeft: '20px',
           paddingRight: '20px',
+          marginLeft: 'auto',
+          marginRight: 'auto',
+          boxSizing: 'border-box',
         }}
       >
         <VStack
@@ -200,6 +221,8 @@ const CameraStep = ({ fileNames, onCapture }: CameraStepProps) => {
             <VStack
               $css={{
                 gap: '10px',
+                width: '100%',
+                maxWidth: '420px',
                 alignItems: 'center',
               }}
             >
