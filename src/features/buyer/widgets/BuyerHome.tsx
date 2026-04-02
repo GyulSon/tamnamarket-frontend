@@ -176,7 +176,6 @@ export function BuyerHome() {
           $css={{
             gap: '$250',
             paddingTop: '$250',
-            paddingBottom: '$250',
           }}
         >
           <SectionHeader

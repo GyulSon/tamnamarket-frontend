@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import { Box, VStack, Text, Tabs } from '@vapor-ui/core';
-import { AppHeader } from '../../../components/AppHeader';
 import { FarmerCard } from '../farmers/components';
 
 type FilterOption = '전체' | '재구매율 높은' | '판매 많은' | '신규 농부';
@@ -115,8 +114,6 @@ export function BuyerFarmers() {
         backgroundColor: '$canvas-100',
         minHeight: '100dvh',
         paddingTop: '$150',
-        marginLeft: 'auto',
-        marginRight: 'auto',
         position: 'relative',
       }}
     >
@@ -139,7 +136,6 @@ export function BuyerFarmers() {
             <Tabs.List
               $css={{
                 width: '100%',
-                maxWidth: '375px',
                 display: 'flex',
                 gap: '$000',
                 padding: '$000',
