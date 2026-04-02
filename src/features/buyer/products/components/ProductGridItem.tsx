@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import { Box, VStack, Text } from '@vapor-ui/core';
+import { useRouter } from 'next/navigation';
 
 interface ProductGridItemProps {
   imageUrl?: string;
@@ -18,11 +19,16 @@ export function ProductGridItem({
   farmerName,
   salePercent,
   price,
-  onClick,
 }: ProductGridItemProps) {
+  const router = useRouter();
+
+  const handleClick = () => {
+    router.push('/buyer/products/1');
+  };
+
   return (
     <VStack
-      render={<button onClick={onClick} />}
+      render={<button onClick={handleClick} />}
       $css={{
         gap: '$075',
         width: '100%',
@@ -59,7 +65,10 @@ export function ProductGridItem({
               paddingRight: '$075',
             }}
           >
-            <Text typography="body4" $css={{ color: '$white', fontWeight: '700' }}>
+            <Text
+              typography="body4"
+              $css={{ color: '$white', fontWeight: '700' }}
+            >
               {salePercent}%
             </Text>
           </Box>
@@ -73,11 +82,19 @@ export function ProductGridItem({
             {location} · {farmerName}
           </Text>
         )}
-        <Text typography="body3" foreground="normal-200" $css={{ fontWeight: '600', textAlign: 'left' }}>
+        <Text
+          typography="body3"
+          foreground="normal-200"
+          $css={{ fontWeight: '600', textAlign: 'left' }}
+        >
           {title}
         </Text>
         {price !== undefined && (
-          <Text typography="body3" foreground="normal-200" $css={{ fontWeight: '700' }}>
+          <Text
+            typography="body3"
+            foreground="normal-200"
+            $css={{ fontWeight: '700' }}
+          >
             {price.toLocaleString()}원
           </Text>
         )}
