@@ -29,6 +29,7 @@ export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
       render={<nav />}
       $css={{
         justifyContent: 'space-between',
+        gap: '$400',
         alignItems: 'center',
         backgroundColor: '$basic-white',
         paddingTop: '$150',
@@ -40,6 +41,8 @@ export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
         bottom: '0',
         left: '0',
         right: '0',
+        maxWidth: '375px',
+        margin: '0 auto',
       }}
     >
       {TABS.map((tab) => {
