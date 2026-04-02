@@ -7,8 +7,6 @@ interface ProductTitleProps {
 export const ProductTitle = ({ title }: ProductTitleProps) => {
   return (
     <Text
-      size="lg"
-      weight="bold"
       style={{
         color: 'var(--fg-neutral-900)',
         lineHeight: '1.5',
