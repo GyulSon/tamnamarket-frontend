@@ -1,3 +1,9 @@
+@layer tw-theme, vapor, tw-utilities;
+
+@import '@vapor-ui/core/tailwind.css';
+@import 'tailwindcss/theme.css' layer(tw-theme);
+@import 'tailwindcss/utilities.css' layer(tw-utilities);
+
 @font-face {
   font-family: 'CustomFont';
   src: url('/fonts/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2')
@@ -14,7 +20,7 @@
   --card-foreground: var(--vapor-color-foreground-normal-200);
   --popover: var(--vapor-color-background-overlay-100);
   --popover-foreground: var(--vapor-color-foreground-normal-200);
-  --primary: var(--vapor-color-blue-500);
+  --primary: var(--vapor-color-background-primary-200);
   --primary-foreground: var(--vapor-color-foreground-inverse);
   --secondary: var(--vapor-color-background-secondary-100);
   --secondary-foreground: var(--vapor-color-foreground-secondary-200);
@@ -26,13 +32,18 @@
   --input: var(--vapor-color-white);
   --input-foreground: var(--vapor-color-foreground-normal-200);
   --input-border: var(--vapor-color-border-secondary);
-  --ring: var(--vapor-color-blue-300);
+  --ring: #ff761b;
   --destructive: var(--vapor-color-background-danger-200);
   --destructive-foreground: var(--vapor-color-foreground-inverse);
   --success: var(--vapor-color-background-success-200);
   --success-foreground: var(--vapor-color-foreground-inverse);
   --warning: var(--vapor-color-background-warning-200);
   --warning-foreground: var(--vapor-color-foreground-inverse);
+  --vapor-color-background-primary-100: #fff1e8;
+  --vapor-color-background-primary-200: #ff761b;
+  --vapor-color-foreground-primary-100: #d85f12;
+  --vapor-color-foreground-primary-200: #b94f0f;
+  --vapor-color-border-primary: #ff761b;
 }
 
 *,
@@ -50,7 +61,7 @@ body {
 
 body {
   font-family:
-    'CustomFont',
+    'var(--vapor-typography-fontFamily-sans)',
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',
