@@ -13,7 +13,9 @@ interface BuyerStore {
 
 export const useBuyerStore = create<BuyerStore>((set) => ({
   activeTab: 'home',
-  setActiveTab: (activeTab) => set({ activeTab }),
+  setActiveTab: (activeTab) => {
+    set({ activeTab });
+  },
 
   category: '전체',
   setCategory: (category) => set({ category }),
