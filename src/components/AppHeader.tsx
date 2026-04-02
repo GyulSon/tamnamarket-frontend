@@ -1,7 +1,7 @@
 import { Box, HStack } from '@vapor-ui/core';
 import { BellOnOutlineIcon } from '@vapor-ui/icons';
 import Image from 'next/image';
-import { ReactNode } from 'react';
+import { ReactNode, useRef } from 'react';
 
 interface AppHeaderProps {
   logo?: ReactNode;
@@ -9,8 +9,27 @@ interface AppHeaderProps {
 }
 
 export function AppHeader({ logo, children }: AppHeaderProps) {
+  const clickCountRef = useRef(0);
+  const clickTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const handleHeaderClick = () => {
+    clickCountRef.current += 1;
+    if (clickTimerRef.current) {
+      clearTimeout(clickTimerRef.current);
+    }
+    if (clickCountRef.current >= 3) {
+      localStorage.clear();
+      clickCountRef.current = 0;
+    } else {
+      clickTimerRef.current = setTimeout(() => {
+        clickCountRef.current = 0;
+      }, 500);
+    }
+  };
+
   return (
     <HStack
+      onClick={handleHeaderClick}
       $css={{
         justifyContent: 'space-between',
         alignItems: 'center',

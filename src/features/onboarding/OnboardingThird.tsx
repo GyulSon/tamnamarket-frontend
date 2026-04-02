@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Box, Button, HStack, Text, VStack } from '@vapor-ui/core';
+import { Box,  HStack, Text, VStack } from '@vapor-ui/core';
 
 type UserRole = 'seller' | 'buyer' | null;
 
@@ -13,8 +13,10 @@ export default function OnboardingThird() {
 
   const handleStartClick = () => {
     if (selectedRole === 'seller') {
+      localStorage.setItem('selectedRole', 'seller');
       router.push('/seller');
     } else if (selectedRole === 'buyer') {
+      localStorage.setItem('selectedRole', 'buyer');
       router.push('/buyer');
     }
   };
