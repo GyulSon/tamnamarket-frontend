@@ -20,17 +20,27 @@ export function ProductCategoryChips({
   onChange,
 }: ProductCategoryChipsProps) {
   return (
-    <HStack
-      $css={{
-        gap: '$075',
-        paddingTop: '$150',
-        paddingBottom: '$075',
-        overflowX: 'auto',
-        flexShrink: '0',
-      }}
-      className="hide-scrollbar"
-    >
-      {CATEGORIES.map((category) => {
+    <>
+      <style>{`
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}</style>
+      <HStack
+        $css={{
+          gap: '$075',
+          paddingTop: '$150',
+          paddingBottom: '$075',
+          overflowX: 'auto',
+          flexShrink: '0',
+        }}
+        className="hide-scrollbar"
+      >
+        {CATEGORIES.map((category) => {
         const active = selected === category;
         return (
           <Box
@@ -61,6 +71,7 @@ export function ProductCategoryChips({
           </Box>
         );
       })}
-    </HStack>
+      </HStack>
+    </>
   );
 }
