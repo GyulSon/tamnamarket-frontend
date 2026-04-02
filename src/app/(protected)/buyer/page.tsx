@@ -4,7 +4,7 @@ import { BuyerHome } from '@/features/buyer/widgets/BuyerHome';
 import { BuyerFarmers } from '@/features/buyer/widgets/BuyerFarmers';
 import { BuyerProducts } from '@/features/buyer/widgets/BuyerProducts';
 import { BuyerMyPage } from '@/features/buyer/widgets/BuyerMyPage';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { BottomNav, type BottomNavTab } from '@/components/BottomNav';
 import { useBuyerStore } from '@/store/buyerStore';
 import SectionContainer from '@/components/SectionContainer';
@@ -20,9 +20,10 @@ const SCREENS: Record<BottomNavTab, React.ReactNode> = {
 
 const BuyerPage = () => {
   const { activeTab, setActiveTab } = useBuyerStore();
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    window.scrollTo(0, 0);
+    scrollRef.current?.scrollTo(0, 0);
   }, [activeTab]);
   return (
     <Box
@@ -45,6 +46,7 @@ const BuyerPage = () => {
         <AppHeader />
       </Box>
       <Box
+        ref={scrollRef}
         $css={{
           flex: 1,
           overflowY: 'auto',
