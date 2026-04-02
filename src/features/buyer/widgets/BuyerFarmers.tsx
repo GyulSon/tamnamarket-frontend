@@ -1,112 +1,38 @@
 'use client';
 
 import { useState } from 'react';
-import { Box, VStack, Text, Tabs } from '@vapor-ui/core';
-import { FarmerCard } from '../farmers/components';
-
-type FilterOption = '전체' | '재구매율 높은' | '판매 많은' | '신규 농부';
+import { Box, VStack, Text, Tabs, FONT_WEIGHT } from '@vapor-ui/core';
+import { FarmerCard } from '@/features/buyer/home/components';
 
 const MOCK_FARMERS = [
   {
     id: '1',
     name: '김순자 할망',
     location: '애월읍',
-    description: '3대째 이어온 감귤 농부. 햇청귤, 한라봉 전문.',
+    description: '농사 경력 40년',
     percent: 87,
-    totalSellCnt: 568,
-    tags: ['감귤류', '친환경'],
-    imageUrl: '/images/mock/buyer/product1.png',
-    isSubscribe: true,
+    totalSellCnt: 582,
   },
   {
     id: '2',
-    name: '이제주 농부',
-    location: '구좌읍',
-    description: '친환경 무농약 재배. 유기농 인증 보유.',
-    percent: 63,
-    totalSellCnt: 162,
-    tags: ['유기농', '당근'],
-    imageUrl: '/images/mock/buyer/product2.png',
-    isSubscribe: false,
+    name: '박영수 삼촌',
+    location: '서귀포',
+    description: '농사 경력 40년',
+    percent: 87,
+    totalSellCnt: 582,
   },
   {
     id: '3',
-    name: '박영수 삼촌',
-    location: '서귀포',
-    description: '당일 수확 당일 배송. 봄동, 양배추 전문.',
-    percent: 95,
-    totalSellCnt: 22,
-    tags: ['봄동', '신선배송'],
-    imageUrl: '/images/mock/buyer/product3.png',
-    isSubscribe: true,
-  },
-  {
-    id: '4',
-    name: '오분자기 해녀',
-    location: '구좌읍',
-    description: '30년 경력 해녀. 해산물 당일 채취.',
-    percent: 78,
-    totalSellCnt: 310,
-    tags: ['해산물', '해녀'],
-    imageUrl: '/images/mock/buyer/product4.png',
-    isSubscribe: true,
-  },
-  {
-    id: '5',
-    name: '강한라 농부',
-    location: '한림읍',
-    description: '전복, 성게 전문 어부. 자연산만 취급.',
-    percent: 82,
-    totalSellCnt: 95,
-    tags: ['전복', '자연산'],
-    imageUrl: '/images/mock/buyer/product5.png',
-    isSubscribe: false,
-  },
-  {
-    id: '6',
-    name: '김순자 할망',
-    location: '애월읍',
-    description: '3대째 이어온 감귤 농부. 햇청귤, 한라봉 전문.',
-    percent: 87,
-    totalSellCnt: 568,
-    tags: ['감귤류', '친환경'],
-    imageUrl: '/images/mock/buyer/product1.png',
-    isSubscribe: true,
-  },
-  {
-    id: '7',
     name: '이제주 농부',
     location: '구좌읍',
-    description: '친환경 무농약 재배. 유기농 인증 보유.',
-    percent: 63,
-    totalSellCnt: 162,
-    tags: ['유기농', '당근'],
-    imageUrl: '/images/mock/buyer/product2.png',
-    isSubscribe: false,
+    description: '농사 경력 40년',
+    percent: 87,
+    totalSellCnt: 582,
   },
 ];
 
-function sortFarmers(farmers: typeof MOCK_FARMERS, filter: FilterOption) {
-  if (filter === '재구매율 높은')
-    return [...farmers].sort((a, b) => b.percent - a.percent);
-  if (filter === '판매 많은')
-    return [...farmers].sort((a, b) => b.totalSellCnt - a.totalSellCnt);
-  if (filter === '신규 농부')
-    return [...farmers].sort((a, b) => a.totalSellCnt - b.totalSellCnt);
-  return farmers;
-}
-
 export function BuyerFarmers() {
-  const [filter, setFilter] = useState<FilterOption>('전체');
   const [activeTab, setActiveTab] = useState('all');
-
-  // 탭에 따라 필터링된 농부 목록
-  const filteredByTab =
-    activeTab === 'favorites'
-      ? MOCK_FARMERS.filter((farmer) => farmer.isSubscribe)
-      : MOCK_FARMERS;
-
-  const sorted = sortFarmers(filteredByTab, filter);
 
   return (
     <Box
@@ -140,6 +66,15 @@ export function BuyerFarmers() {
                 gap: '$000',
                 padding: '$000',
               }}
+              indicatorElement={
+                <Tabs.IndicatorPrimitive
+                  style={{
+                    height: '2px',
+                    borderRadius: '2px',
+                    backgroundColor: '#000000',
+                  }}
+                />
+              }
             >
               <Tabs.Button
                 value="all"
@@ -155,7 +90,11 @@ export function BuyerFarmers() {
                   transition: 'all 0.2s ease',
                 }}
               >
-                전체 농부 찾기
+                {activeTab === 'all' ? (
+                  <Text $css={{ fontWeight: '800' }}>전체 농부 찾기</Text>
+                ) : (
+                  <Text $css={{ fontWeight: '400' }}>전체 농부 찾기</Text>
+                )}
               </Tabs.Button>
               <Tabs.Button
                 value="favorites"
@@ -165,38 +104,43 @@ export function BuyerFarmers() {
                   fontSize: '$200',
                   textAlign: 'center',
                   fontWeight: '600',
-                  borderBottomStyle: 'solid',
-                  borderBottomColor:
-                    activeTab === 'favorites' ? '$basic-blue-100' : 'White',
-                  borderBottom: activeTab === 'favorites' ? '3px' : 'none',
-                  color: activeTab === 'favorites' ? '$black' : '$hint-100',
+                  borderBottom:
+                    activeTab === 'favorites'
+                      ? '3px solid $normal-900'
+                      : 'none',
+                  color:
+                    activeTab === 'favorites' ? '$normal-900' : '$hint-100',
                   transition: 'all 0.2s ease',
                 }}
               >
-                내 단골 농부
+                {activeTab === 'favorites' ? (
+                  <Text $css={{ fontWeight: '800' }}>내 단골 농부</Text>
+                ) : (
+                  <Text $css={{ fontWeight: '400' }}>내 단골 농부</Text>
+                )}
               </Tabs.Button>
             </Tabs.List>
           </Box>
 
+          <Box
+            $css={{
+              marginTop: '$250',
+            }}
+          />
+
           {/* 전체 농부 찾기 탭 */}
           <Tabs.Panel value="all">
-            <VStack
-              $css={{
-                paddingBottom: '$000',
-              }}
-            >
-              {/* 농부 목록 */}
-              <VStack
-                $css={{
-                  gap: '$200',
-                  paddingLeft: '$250',
-                  paddingRight: '$250',
-                }}
-              >
-                {sorted.map((farmer) => (
-                  <FarmerCard key={farmer.id} farmer={farmer} />
-                ))}
-              </VStack>
+            <VStack $css={{ gap: '$200' }}>
+              {MOCK_FARMERS.map((farmer) => (
+                <FarmerCard
+                  key={farmer.id}
+                  name={farmer.name}
+                  location={farmer.location}
+                  description={farmer.description}
+                  percent={farmer.percent}
+                  totalSellCnt={farmer.totalSellCnt}
+                />
+              ))}
             </VStack>
           </Tabs.Panel>
 
