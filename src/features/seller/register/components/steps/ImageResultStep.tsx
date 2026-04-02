@@ -5,22 +5,27 @@ import { Box, Button, Text, VStack } from '@vapor-ui/core';
 import Image from 'next/image';
 
 type ImageResultStepProps = {
-  classificationError?: string;
+  errorMessage?: string;
   classificationResult?: string;
+  isConfirmDisabled?: boolean;
   previewUrl: string;
   onRetry: () => void;
   onConfirm: () => void;
+  onBypassConfirm?: () => void;
 };
 
 const ImageResultStep = ({
-  classificationError,
+  errorMessage,
   classificationResult,
+  isConfirmDisabled = false,
   previewUrl,
   onRetry,
   onConfirm,
+  onBypassConfirm,
 }: ImageResultStepProps) => {
-  const hasError = Boolean(classificationError);
-  const resultLabel = classificationResult?.trim() || '특산품';
+  const hasError = Boolean(errorMessage);
+  const resultLabel = classificationResult?.trim();
+  const shouldShowBypassButton = isConfirmDisabled && Boolean(onBypassConfirm);
 
   return (
     <Box
@@ -80,19 +85,7 @@ const ImageResultStep = ({
               >
                 이미지 분석 결과
               </Text>
-              {hasError ? (
-                <Text
-                  typography="heading3"
-                  $css={{
-                    color: '#dc2626',
-                    fontSize: 'var(--vapor-typography-fontSize-500)',
-                    fontWeight: 700,
-                    lineHeight: 1.25,
-                  }}
-                >
-                  결과를 확인하지 못했어요
-                </Text>
-              ) : (
+              {resultLabel ? (
                 <Text
                   typography="heading3"
                   $css={{
@@ -108,6 +101,18 @@ const ImageResultStep = ({
                   <span style={{ color: '#111111' }}>
                     로 인식했어요
                   </span>
+                </Text>
+              ) : (
+                <Text
+                  typography="heading3"
+                  $css={{
+                    color: '#dc2626',
+                    fontSize: 'var(--vapor-typography-fontSize-500)',
+                    fontWeight: 700,
+                    lineHeight: 1.25,
+                  }}
+                >
+                  결과를 확인하지 못했어요
                 </Text>
               )}
             </VStack>
@@ -141,7 +146,7 @@ const ImageResultStep = ({
                   lineHeight: 1.5,
                 }}
               >
-                {classificationError}
+                {errorMessage}
               </Text>
             ) : null}
           </VStack>
@@ -186,18 +191,38 @@ const ImageResultStep = ({
               </Button>
 
               <Button
+                disabled={isConfirmDisabled}
                 onClick={onConfirm}
                 colorPalette="primary"
                 $css={{
                   flex: 1,
                   height: '48px',
                   borderRadius: '12px',
-                  fontWeight: 700,
+                  backgroundColor: isConfirmDisabled ? '#efb184' : undefined,
+                  opacity: isConfirmDisabled ? 1 : undefined,
+                  fontWeight: 500,
                 }}
               >
                 네 맞아요
               </Button>
             </Box>
+
+            {shouldShowBypassButton ? (
+              <Button
+                onClick={onBypassConfirm}
+                $css={{
+                  width: '100%',
+                  height: '44px',
+                  borderRadius: '12px',
+                  backgroundColor: '#dc2626',
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  border: 'none',
+                }}
+              >
+                UI 확인용 다음 화면 보기
+              </Button>
+            ) : null}
           </VStack>
         </VStack>
       </VStack>
