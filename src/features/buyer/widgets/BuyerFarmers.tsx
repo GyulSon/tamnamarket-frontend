@@ -128,8 +128,6 @@ export function BuyerFarmers() {
             overflow: 'auto',
           }}
         >
-          {/* 헤더 */}
-          <AppHeader />
 
           {/* 탭 네비게이션 */}
           <Box

@@ -113,7 +113,6 @@ export function BuyerProducts() {
       }}
     >
       <VStack $css={{ paddingBottom: '84px', overflow: 'auto' }}>
-        <AppHeader />
         <ProductSearchBar />
         <ProductCategoryChips selected={category} onChange={setCategory} />
         <ProductSortBar

@@ -20,15 +20,15 @@ const SCREENS: Record<BottomNavTab, React.ReactNode> = {
 const BuyerPage = () => {
   const [activeTab, setActiveTab] = useState<BottomNavTab>('home');
   return (
-    <>
-      <SectionContainer>
-        <VStack>
+    <div style={{ position: 'relative' }}>
+      <SectionContainer pb={false}>
+        <VStack $css={{ paddingBottom: '84px' }}>
           <AppHeader />
           {SCREENS[activeTab]}
         </VStack>
       </SectionContainer>
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
-    </>
+    </div>
   );
 };
 

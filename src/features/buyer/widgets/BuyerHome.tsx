@@ -63,9 +63,6 @@ export function BuyerHome() {
           overflow: 'auto',
         }}
       >
-        {/* 헤더 */}
-        <AppHeader />
-
         {/* 히어로 배너 */}
         <Box $css={{ paddingTop: '$150' }}>
           <HeroBanner />

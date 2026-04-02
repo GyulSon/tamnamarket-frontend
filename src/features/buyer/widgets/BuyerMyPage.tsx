@@ -33,8 +33,6 @@ export function BuyerMyPage() {
       }}
     >
       <VStack $css={{ paddingBottom: '84px' }}>
-        {/* 상태 바 + 헤더 */}
-        <AppHeader />
 
         {/* 프로필 섹션 */}
         <HStack

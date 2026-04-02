@@ -27,6 +27,7 @@ export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
   return (
     <HStack
       render={<nav />}
+      className={}
       $css={{
         justifyContent: 'space-between',
         gap: '$400',
@@ -36,7 +37,6 @@ export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
         paddingBottom: '$250',
         paddingLeft: '$500',
         paddingRight: '$500',
-        borderTop: '1px solid var(--vapor-color-border-normal)',
         position: 'fixed',
         bottom: '0',
         left: '0',
