@@ -14,7 +14,7 @@ import {
   type SaleDraftResponse,
   classifySaleImage,
   submitSaleVoiceAnswers,
-} from '@/lib/api/project';
+} from '@/entities/seller';
 
 type RegisterStep =
   | 'camera'
@@ -34,7 +34,10 @@ type SaleDraft = {
 };
 
 const DEFAULT_RECOMMENDED_PRICE = '28,000원';
-const IMAGE_ANALYZING_MIN_DURATION_MS = 1500;
+const DEFAULT_PRODUCT_DESCRIPTION =
+  '애월읍 김순자 할망께서 40년 경력으로 정성껏 재배하신 햇청귤입니다. 올해는 일교차가 커서 당도가 특히 높으며, 비타민C가 풍부해 환절기 건강관리에 좋습니다. 농약을 최소화하고 유기농 퇴비로 키워 안심하고 드실 수 있습니다.';
+const getErrorMessage = (error: unknown, fallbackMessage: string) =>
+  error instanceof Error ? error.message : fallbackMessage;
 
 const formatRecommendedPrice = (
   recommendedPrice?: SaleDraftResponse['recommendedPrice']
@@ -72,25 +75,10 @@ const buildSaleDraft = (
     recommendedPrice: formatRecommendedPrice(response.recommendedPrice),
     priceReason:
       response.priceReason?.trim() || '지역 시세를 고려하여 책정했어요',
-    description:
-      response.description?.trim() ||
-      `정성껏 재배한 ${baseLabel}이에요. AI가 음성 답변을 바탕으로 상품 소개를 먼저 정리했어요. 등록 전에 문구와 가격을 한 번 더 확인해주세요.`,
+    description: DEFAULT_PRODUCT_DESCRIPTION,
     sellerMessage:
       response.sellerMessage?.trim() ||
       `${baseLabel} 정말 자신 있어요. 맛있게 드셔주세요!`,
-  };
-};
-
-const buildMockSaleDraft = (classificationResult: string): SaleDraft => {
-  const baseLabel = classificationResult.trim() || '특산품';
-
-  return {
-    categoryLabel: baseLabel,
-    title: `${baseLabel} 2kg 한 박스(특품)`,
-    recommendedPrice: DEFAULT_RECOMMENDED_PRICE,
-    priceReason: '지역 시세를 고려하여 책정했어요',
-    description: `정성껏 재배한 ${baseLabel}이에요. 음성 답변 기반 문구는 API 연동 후 자동으로 채워질 예정이라, 지금은 등록 플로우 확인용 초안을 먼저 보여주고 있어요.`,
-    sellerMessage: `${baseLabel} 신선하게 준비했어요. 곧 실제 음성 요약도 함께 반영할게요!`,
   };
 };
 
@@ -98,10 +86,10 @@ const SellerRegisterPage = () => {
   const router = useRouter();
   const [step, setStep] = useState<RegisterStep>('camera');
   const [capturedPhotoFile, setCapturedPhotoFile] = useState<File | null>(null);
-  const [photoNames, setPhotoNames] = useState<string[]>([]);
   const [capturedPhotoPreviewUrl, setCapturedPhotoPreviewUrl] = useState('');
   const [classificationError, setClassificationError] = useState('');
   const [classificationResult, setClassificationResult] = useState('');
+  const [productId, setProductId] = useState<number | null>(null);
   const [voiceAnswerFiles, setVoiceAnswerFiles] = useState<File[]>([]);
   const [saleDraft, setSaleDraft] = useState<SaleDraft | null>(null);
   const [submitError, setSubmitError] = useState('');
@@ -124,36 +112,37 @@ const SellerRegisterPage = () => {
     let transitionTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
     const requestClassification = async () => {
-      const analyzingStartedAt = Date.now();
-
       try {
-        const response = await classifySaleImage(capturedPhotoFile);
+        const classificationResponse =
+          await classifySaleImage(capturedPhotoFile);
 
         if (isCancelled) {
           return;
         }
 
-        setClassificationResult(response.result);
-        setClassificationError('');
-      } catch {
+        setClassificationResult(classificationResponse.result);
+        setProductId(classificationResponse.productId ?? null);
+        setClassificationError(
+          classificationResponse.productId === undefined
+            ? '상품 정보를 확인하지 못했어요. 사진을 다시 등록해주세요.'
+            : ''
+        );
+      } catch (error) {
         if (isCancelled) {
           return;
         }
 
         setClassificationResult('');
-        setClassificationError('사진 분석 결과를 불러오지 못했다.');
-      } finally {
-        const elapsedTime = Date.now() - analyzingStartedAt;
-        const remainingTime = Math.max(
-          0,
-          IMAGE_ANALYZING_MIN_DURATION_MS - elapsedTime
+        setProductId(null);
+        setClassificationError(
+          getErrorMessage(error, '품종 분류에 실패했어요. 다시 시도해주세요.')
         );
-
+      } finally {
         transitionTimeoutId = setTimeout(() => {
           if (!isCancelled) {
             setStep('imageResult');
           }
-        }, remainingTime);
+        }, 0);
       }
     };
 
@@ -182,42 +171,58 @@ const SellerRegisterPage = () => {
       return;
     }
 
-    const analyzingStartedAt = Date.now();
+    if (!classificationResult.trim()) {
+      setSubmitError(
+        '상품 정보를 확인하지 못했어요. 사진을 다시 등록해주세요.'
+      );
+      setStep('imageResult');
+      return;
+    }
+
+    if (productId == null) {
+      setSubmitError(
+        '상품 정보를 확인하지 못했어요. 사진을 다시 등록해주세요.'
+      );
+      setStep('imageResult');
+      return;
+    }
 
     setIsSubmitting(true);
     setSubmitError('');
     setStep('voiceAnalyzing');
 
     try {
-      const response = await submitSaleVoiceAnswers(voiceAnswerFiles);
-      const elapsedTime = Date.now() - analyzingStartedAt;
-      const remainingTime = Math.max(0, 2000 - elapsedTime);
+      const nextDraftResponse: SaleDraftResponse = await submitSaleVoiceAnswers(
+        productId,
+        voiceAnswerFiles
+      );
+      const hasDraftContent = Object.values(nextDraftResponse).some((value) => {
+        if (typeof value === 'string') {
+          return value.trim().length > 0;
+        }
 
-      if (remainingTime > 0) {
-        await new Promise((resolve) => {
-          setTimeout(resolve, remainingTime);
-        });
+        return value !== undefined && value !== null;
+      });
+
+      if (!hasDraftContent) {
+        setSubmitError(
+          '게시물 초안을 생성하지 못했어요. 음성 답변을 다시 전송해주세요.'
+        );
+        setStep('voice');
+        return;
       }
 
-      setSaleDraft(buildSaleDraft(response, classificationResult));
+      setSaleDraft(buildSaleDraft(nextDraftResponse, classificationResult));
       setStep('voiceResult');
     } catch {
-      const elapsedTime = Date.now() - analyzingStartedAt;
-      const remainingTime = Math.max(0, 2000 - elapsedTime);
-
-      if (remainingTime > 0) {
-        await new Promise((resolve) => {
-          setTimeout(resolve, remainingTime);
-        });
-      }
-
-      setSubmitError('');
-      setSaleDraft(buildMockSaleDraft(classificationResult));
-      setStep('voiceResult');
+      setSubmitError(
+        '게시물 초안을 생성하지 못했어요. 음성 답변을 다시 전송해주세요.'
+      );
+      setStep('voice');
     } finally {
       setIsSubmitting(false);
     }
-  }, [classificationResult, voiceAnswerFiles]);
+  }, [classificationResult, productId, voiceAnswerFiles]);
 
   const currentStepIndex = stepIndexMap[step];
 
@@ -252,17 +257,16 @@ const SellerRegisterPage = () => {
           <Box $css={{ flex: '0 0 100%', minWidth: 0 }}>
             <CameraStep
               isActive={step === 'camera'}
-              fileNames={photoNames}
-              onCapture={({ file, fileName, previewUrl }) => {
+              onCapture={({ file, previewUrl }) => {
                 if (capturedPhotoPreviewUrl.startsWith('blob:')) {
                   URL.revokeObjectURL(capturedPhotoPreviewUrl);
                 }
 
                 setCapturedPhotoFile(file);
-                setPhotoNames([fileName]);
                 setCapturedPhotoPreviewUrl(previewUrl);
                 setClassificationResult('');
                 setClassificationError('');
+                setProductId(null);
                 setVoiceAnswerFiles([]);
                 setSaleDraft(null);
                 setSubmitError('');
@@ -277,20 +281,32 @@ const SellerRegisterPage = () => {
 
           <Box $css={{ flex: '0 0 100%', minWidth: 0 }}>
             <ImageResultStep
-              classificationError={classificationError}
+              errorMessage={classificationError}
               classificationResult={classificationResult}
+              isConfirmDisabled={
+                !classificationResult.trim() ||
+                productId == null ||
+                Boolean(classificationError)
+              }
               previewUrl={capturedPhotoPreviewUrl}
               onRetry={() => {
                 setClassificationResult('');
                 setClassificationError('');
+                setProductId(null);
                 setSubmitError('');
                 setVoiceAnswerFiles([]);
                 setSaleDraft(null);
                 setStep('camera');
               }}
               onConfirm={() => {
-                setVoiceAnswerFiles([]);
-                setSaleDraft(null);
+                if (
+                  !classificationResult.trim() ||
+                  productId == null ||
+                  classificationError
+                ) {
+                  return;
+                }
+
                 setSubmitError('');
                 setStep('voice');
               }}

@@ -42,14 +42,6 @@ type BrowserWindow = Window &
     webkitAudioContext?: typeof AudioContext;
   };
 
-type AudioSessionType = 'auto' | 'playback' | 'play-and-record';
-
-type BrowserNavigator = Navigator & {
-  audioSession?: {
-    type: AudioSessionType;
-  };
-};
-
 type VoiceStepProps = {
   isActive: boolean;
   voiceAnswerFiles: File[];
@@ -86,6 +78,7 @@ const VoiceStep = ({
   const speakQuestionRef = useRef<(questionIndex: number) => void>(
     () => undefined
   );
+  const hasAutoStartedRef = useRef(false);
   const isUnmountedRef = useRef(false);
   const audioStreamRef = useRef<MediaStream | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -130,20 +123,6 @@ const VoiceStep = ({
   const stopAudioStream = useCallback(() => {
     audioStreamRef.current?.getTracks().forEach((track) => track.stop());
     audioStreamRef.current = null;
-  }, []);
-
-  const setAudioSessionType = useCallback((type: AudioSessionType) => {
-    const browserNavigator = navigator as BrowserNavigator;
-
-    if (!browserNavigator.audioSession) {
-      return;
-    }
-
-    try {
-      browserNavigator.audioSession.type = type;
-    } catch {
-      // iOS WebKit experimental API라 실패해도 흐름은 유지한다.
-    }
   }, []);
 
   const speakQuestion = useCallback(
@@ -402,19 +381,17 @@ const VoiceStep = ({
     }
 
     try {
-      setAudioSessionType('play-and-record');
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       audioStreamRef.current = stream;
       return true;
     } catch {
-      setAudioSessionType('auto');
       setFlowStatus('idle');
       setStatusMessage(
         '마이크 권한이 거부되었어요. 브라우저 설정에서 허용해주세요.'
       );
       return false;
     }
-  }, [setAudioSessionType]);
+  }, []);
 
   const resetPendingVoiceFlow = useCallback(() => {
     clearNoSpeechTimer();
@@ -437,12 +414,10 @@ const VoiceStep = ({
     }
 
     stopAudioStream();
-    setAudioSessionType('auto');
   }, [
     cleanupAudioMonitoring,
     clearMaxRecordingTimer,
     clearNoSpeechTimer,
-    setAudioSessionType,
     stopAudioStream,
   ]);
 
@@ -475,10 +450,6 @@ const VoiceStep = ({
     setStatusMessage('');
     speakQuestion(0);
   }, [onVoiceAnswersChange, requestAudioPermission, speakQuestion]);
-
-  const handleReplayQuestion = useCallback(() => {
-    speakQuestion(currentQuestionIndexRef.current);
-  }, [speakQuestion]);
 
   const handleSkipForTest = useCallback(() => {
     resetPendingVoiceFlow();
@@ -526,6 +497,7 @@ const VoiceStep = ({
       return;
     }
 
+    hasAutoStartedRef.current = false;
     resetPendingVoiceFlow();
 
     if (
@@ -538,6 +510,19 @@ const VoiceStep = ({
     }
   }, [flowStatus, isActive, resetPendingVoiceFlow]);
 
+  useEffect(() => {
+    if (!isActive || hasAutoStartedRef.current || voiceAnswerFiles.length > 0) {
+      return;
+    }
+
+    if (flowStatus !== 'idle') {
+      return;
+    }
+
+    hasAutoStartedRef.current = true;
+    void handleStartVoiceFlow();
+  }, [flowStatus, handleStartVoiceFlow, isActive, voiceAnswerFiles.length]);
+
   const isCompleted = flowStatus === 'completed';
   const completedAnswerCount = voiceAnswerFiles.filter(Boolean).length;
   const canSubmit = completedAnswerCount === VOICE_QUESTIONS.length;
@@ -545,8 +530,6 @@ const VoiceStep = ({
     currentQuestionIndex,
     VOICE_PROGRESS_SEGMENTS - 1
   );
-  const showFloatingAction =
-    isSpeechSupported && !isCompleted && !isSubmitting && flowStatus === 'idle';
   const currentQuestionExample = VOICE_QUESTION_EXAMPLES[currentQuestionIndex];
   const currentQuestionExampleBody = currentQuestionExample.replace(
     /^예시\s*/,
@@ -772,67 +755,20 @@ const VoiceStep = ({
             maxWidth: '720px',
             height: '48px',
             borderRadius: '12px',
-            backgroundColor: canSubmit && !isSubmitting ? '#f68632' : '#f3c19b',
+            backgroundColor:
+              canSubmit && !isSubmitting
+                ? '#ee7e38'
+                : '#f8c9a6',
             color: '#ffffff',
-            fontWeight: 700,
+            fontWeight: 500,
             border: 'none',
+            opacity: !canSubmit || isSubmitting ? 1 : undefined,
             marginLeft: 'auto',
             marginRight: 'auto',
           }}
         >
           {isSubmitting ? '등록 중...' : '상품 등록하기'}
         </Button>
-
-        {showFloatingAction ? (
-          <Box
-            $css={{
-              position: 'absolute',
-              left: '50%',
-              bottom: '92px',
-              transform: 'translateX(-50%)',
-              width: 'calc(100% - 32px)',
-              maxWidth: '720px',
-              zIndex: 2,
-              display: 'flex',
-              justifyContent: 'flex-start',
-            }}
-          >
-            <Button
-              size="sm"
-              onClick={
-                completedAnswerCount === 0
-                  ? () => void handleStartVoiceFlow()
-                  : handleReplayQuestion
-              }
-              aria-label={
-                completedAnswerCount === 0 ? '음성 시작' : '질문 다시 듣기'
-              }
-              title={completedAnswerCount === 0 ? '음성 시작' : '다시 듣기'}
-              $css={{
-                minWidth: '56px',
-                width: '56px',
-                height: '56px',
-                padding: 0,
-                border: 'none',
-                borderRadius: 0,
-                backgroundColor: 'transparent',
-                boxShadow: 'none',
-                color: 'transparent',
-              }}
-            >
-              <Icon
-                icon={
-                  completedAnswerCount === 0
-                    ? 'solar:microphone-3-bold'
-                    : 'solar:volume-loud-bold'
-                }
-                width="24"
-                height="24"
-                color="transparent"
-              />
-            </Button>
-          </Box>
-        ) : null}
       </VStack>
     </Box>
   );

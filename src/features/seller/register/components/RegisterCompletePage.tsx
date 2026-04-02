@@ -10,10 +10,6 @@ type RegisterCompletePageProps = {
 };
 
 const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
-  const headingText = title?.trim()
-    ? `${title} 등록되었습니다`
-    : '특산물이 등록되었습니다';
-
   return (
     <Box
       $css={{
@@ -26,7 +22,7 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
         $css={{
           width: '100%',
           minHeight: '100dvh',
-          paddingTop: '104px',
+          paddingTop: '24px',
           paddingBottom: '24px',
           paddingLeft: '20px',
           paddingRight: '20px',
@@ -41,6 +37,8 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
           $css={{
             alignItems: 'center',
             gap: '20px',
+            flex: 1,
+            justifyContent: 'center',
           }}
         >
           <Box
@@ -51,7 +49,7 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: '999px',
-              backgroundColor: '#f68632',
+              backgroundColor: '#ee7238',
             }}
           >
             <Icon
@@ -80,7 +78,7 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
                 wordBreak: 'keep-all',
               }}
             >
-              {headingText}
+              특산물이 등록되었습니다
             </Text>
 
             <Text
@@ -101,7 +99,7 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
         <Button
           colorPalette="primary"
           nativeButton={false}
-          render={<Link href="/seller" />}
+          render={<Link href="/seller" style={{ color: '#ffffff' }} />}
           $css={{
             width: '100%',
             maxWidth: '340px',
@@ -109,7 +107,10 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
             borderRadius: '12px',
             marginLeft: 'auto',
             marginRight: 'auto',
-            fontWeight: 700,
+            fontSize: 'var(--vapor-typography-fontSize-100)',
+            fontWeight: 600,
+            color: '#ffffff',
+            textDecoration: 'none',
           }}
         >
           홈 화면 바로가기

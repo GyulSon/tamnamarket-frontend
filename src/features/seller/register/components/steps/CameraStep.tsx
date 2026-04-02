@@ -5,15 +5,13 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 
 type CameraStepProps = {
   isActive: boolean;
-  fileNames: string[];
   onCapture: (payload: {
     file: File;
-    fileName: string;
     previewUrl: string;
   }) => void;
 };
 
-const CameraStep = ({ isActive, fileNames, onCapture }: CameraStepProps) => {
+const CameraStep = ({ isActive, onCapture }: CameraStepProps) => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
@@ -100,8 +98,27 @@ const CameraStep = ({ isActive, fileNames, onCapture }: CameraStepProps) => {
     }
 
     setIsCapturing(true);
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
+    const videoAspectRatio = video.videoWidth / video.videoHeight;
+    const viewportWidth = video.clientWidth || window.innerWidth;
+    const viewportHeight = video.clientHeight || window.innerHeight;
+    const viewportAspectRatio = viewportWidth / viewportHeight;
+
+    let sourceX = 0;
+    let sourceY = 0;
+    let sourceWidth = video.videoWidth;
+    let sourceHeight = video.videoHeight;
+
+    // Match the saved frame to the same cover-cropped area the user sees.
+    if (videoAspectRatio > viewportAspectRatio) {
+      sourceWidth = video.videoHeight * viewportAspectRatio;
+      sourceX = (video.videoWidth - sourceWidth) / 2;
+    } else if (videoAspectRatio < viewportAspectRatio) {
+      sourceHeight = video.videoWidth / viewportAspectRatio;
+      sourceY = (video.videoHeight - sourceHeight) / 2;
+    }
+
+    canvas.width = Math.round(sourceWidth);
+    canvas.height = Math.round(sourceHeight);
 
     const context = canvas.getContext('2d');
 
@@ -109,10 +126,19 @@ const CameraStep = ({ isActive, fileNames, onCapture }: CameraStepProps) => {
       return;
     }
 
-    context.drawImage(video, 0, 0, canvas.width, canvas.height);
+    context.drawImage(
+      video,
+      sourceX,
+      sourceY,
+      sourceWidth,
+      sourceHeight,
+      0,
+      0,
+      canvas.width,
+      canvas.height
+    );
 
-    const fileName =
-      fileNames[0] ?? `captured-${new Date().toISOString().slice(0, 19)}.jpg`;
+    const fileName = `captured-${new Date().toISOString().slice(0, 19)}.jpg`;
 
     canvas.toBlob(
       (blob) => {
@@ -126,7 +152,6 @@ const CameraStep = ({ isActive, fileNames, onCapture }: CameraStepProps) => {
         stopCameraStream();
         onCapture({
           file,
-          fileName,
           previewUrl: URL.createObjectURL(blob),
         });
       },
@@ -236,6 +261,9 @@ const CameraStep = ({ isActive, fileNames, onCapture }: CameraStepProps) => {
               <Button
                 colorPalette="primary"
                 onClick={() => void startCameraStream()}
+                $css={{
+                  fontWeight: 500,
+                }}
               >
                 다시 시도
               </Button>
