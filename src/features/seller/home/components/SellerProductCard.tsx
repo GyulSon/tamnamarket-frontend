@@ -37,7 +37,7 @@ export function SellerProductCard({
           height: '88px',
           flexShrink: 0,
           borderRadius: '$400',
-          border: '1px solid $gray-200',
+          border: '1px solid var(--vapor-color-gray-200)',
           backgroundColor: '#D9D9D9',
         }}
       />

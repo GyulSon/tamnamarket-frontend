@@ -127,7 +127,7 @@ export function SellerHome() {
 
           <SectionContainer
             $css={{
-              paddingTop: '56px',
+              paddingTop: '24px',
               paddingLeft: '20px',
               paddingRight: '20px',
               paddingBottom: '0',
@@ -145,9 +145,7 @@ export function SellerHome() {
                 paddingBottom: '16px',
                 paddingLeft: '16px',
                 paddingRight: '16px',
-                borderWidth: '1px',
-                borderStyle: 'solid',
-                borderColor: '$gray-200',
+                border: '1px solid var(--vapor-color-gray-200)',
                 borderRadius: '12px',
                 backgroundColor: '$white',
                 boxSizing: 'border-box',
@@ -165,7 +163,7 @@ export function SellerHome() {
                   typography="heading5"
                   $css={{
                     color: '$black',
-                    fontWeight: '700',
+                    fontWeight: '800',
                     lineHeight: '26px',
                     letterSpacing: '-0.1px',
                   }}
@@ -205,6 +203,7 @@ export function SellerHome() {
                     typography="body3"
                     foreground="white"
                     $css={{
+                      fontSize: 'var(--vapor-typography-fontSize-075)',
                       fontWeight: '500',
                       lineHeight: '22px',
                     }}

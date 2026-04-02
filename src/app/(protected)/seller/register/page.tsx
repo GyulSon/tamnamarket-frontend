@@ -34,11 +34,15 @@ type SaleDraft = {
 };
 
 const DEFAULT_RECOMMENDED_PRICE = '28,000원';
+const IMAGE_ANALYZING_MIN_DURATION_MS = 1500;
 
 const formatRecommendedPrice = (
   recommendedPrice?: SaleDraftResponse['recommendedPrice']
 ) => {
-  if (typeof recommendedPrice === 'number' && Number.isFinite(recommendedPrice)) {
+  if (
+    typeof recommendedPrice === 'number' &&
+    Number.isFinite(recommendedPrice)
+  ) {
     return `${recommendedPrice.toLocaleString('ko-KR')}원`;
   }
 
@@ -140,7 +144,10 @@ const SellerRegisterPage = () => {
         setClassificationError('사진 분석 결과를 불러오지 못했다.');
       } finally {
         const elapsedTime = Date.now() - analyzingStartedAt;
-        const remainingTime = Math.max(0, 5000 - elapsedTime);
+        const remainingTime = Math.max(
+          0,
+          IMAGE_ANALYZING_MIN_DURATION_MS - elapsedTime
+        );
 
         transitionTimeoutId = setTimeout(() => {
           if (!isCancelled) {

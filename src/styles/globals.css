@@ -13,7 +13,7 @@
   --card-foreground: var(--vapor-color-foreground-normal-200);
   --popover: var(--vapor-color-background-overlay-100);
   --popover-foreground: var(--vapor-color-foreground-normal-200);
-  --primary: var(--vapor-color-background-primary-200);
+  --primary: #ee7238;
   --primary-foreground: var(--vapor-color-foreground-inverse);
   --secondary: var(--vapor-color-background-secondary-100);
   --secondary-foreground: var(--vapor-color-foreground-secondary-200);
@@ -50,6 +50,7 @@ body {
   min-height: 100%;
   margin: 0;
   padding: 0;
+  background-color: var(--background);
 }
 
 body {
@@ -68,6 +69,10 @@ body {
     'Noto Color Emoji';
   color: var(--foreground);
   background-color: var(--background);
+  padding-top: env(safe-area-inset-top);
+  padding-right: env(safe-area-inset-right);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
 }
 
 .root {

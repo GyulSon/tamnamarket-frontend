@@ -131,7 +131,7 @@ const CameraStep = ({ isActive, fileNames, onCapture }: CameraStepProps) => {
         });
       },
       'image/jpeg',
-      0.92,
+      0.92
     );
   };
 
@@ -197,14 +197,14 @@ const CameraStep = ({ isActive, fileNames, onCapture }: CameraStepProps) => {
             $css={{
               paddingTop: '10px',
               paddingBottom: '10px',
-              paddingLeft: '14px',
-              paddingRight: '14px',
+              paddingLeft: '16px',
+              paddingRight: '16px',
               borderRadius: '999px',
               backgroundColor: 'rgba(17, 17, 17, 0.62)',
               fontWeight: '500',
             }}
           >
-            testtestetsttestestete
+            상품이 잘 보이게 찍어주세요
           </Text>
         </VStack>
 
