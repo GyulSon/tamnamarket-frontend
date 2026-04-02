@@ -114,7 +114,6 @@ export function BuyerFarmers() {
       $css={{
         backgroundColor: '$canvas-100',
         minHeight: '100dvh',
-        maxWidth: '375px',
         paddingTop: '$150',
         marginLeft: 'auto',
         marginRight: 'auto',
@@ -128,7 +127,6 @@ export function BuyerFarmers() {
             overflow: 'auto',
           }}
         >
-
           {/* 탭 네비게이션 */}
           <Box
             $css={{

@@ -1,5 +1,5 @@
 import { Box, HStack, VStack, Text } from '@vapor-ui/core';
-import { Icon } from '@iconify/react';
+import Image from 'next/image';
 
 interface CategoryItem {
   id: string;
@@ -8,10 +8,10 @@ interface CategoryItem {
 }
 
 const DEFAULT_CATEGORIES: CategoryItem[] = [
-  { id: 'citrus', label: '감귤류', icon: 'lucide:citrus' },
-  { id: 'radish', label: '무', icon: 'lucide:salad' },
-  { id: 'cabbage', label: '양배추', icon: 'lucide:leaf' },
-  { id: 'carrot', label: '당근', icon: 'lucide:carrot' },
+  { id: 'orange', label: '감귤류', icon: '/images/icons/orange.svg' },
+  { id: 'nuts', label: '우도 땅콩', icon: '/images/icons/nuts.svg' },
+  { id: 'leaf', label: '고사리', icon: '/images/icons/leaf.svg' },
+  { id: 'carrot', label: '구좌 당근', icon: '/images/icons/carrot.svg' },
 ];
 
 interface CategoryListProps {
@@ -46,16 +46,13 @@ export function CategoryList({
               $css={{
                 width: '36px',
                 height: '36px',
-                backgroundColor: '$white',
-                borderRadius: '$900',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
                 overflow: 'hidden',
               }}
             >
-              <Icon icon={cat.icon} width={24} height={24} />
+              <Image src={cat.icon} alt={cat.label} width={36} height={36} />
             </Box>
             <Text
               typography="body3"

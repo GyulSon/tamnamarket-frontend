@@ -27,7 +27,6 @@ export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
   return (
     <HStack
       render={<nav />}
-      className={}
       $css={{
         justifyContent: 'space-between',
         gap: '$400',
@@ -41,7 +40,8 @@ export function BottomNav({ activeTab = 'home', onTabChange }: BottomNavProps) {
         bottom: '0',
         left: '0',
         right: '0',
-        maxWidth: '375px',
+        // maxWidth: '375px',
+        zIndex: 10,
         margin: '0 auto',
       }}
     >

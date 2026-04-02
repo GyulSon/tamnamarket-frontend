@@ -1,5 +1,10 @@
 import Image from 'next/image';
 import { Box, HStack, VStack, Text } from '@vapor-ui/core';
+import {
+  ChevronRightOutlineIcon,
+  SignalPowerOutlineIcon,
+  CheckCartOutlineIcon,
+} from '@vapor-ui/icons';
 
 interface FarmerCardProps {
   imageUrl?: string;
@@ -45,49 +50,91 @@ export function FarmerCard({
           position: 'relative',
         }}
       >
-        <Image
-          src={imageUrl}
-          alt={name}
-          fill
-          style={{ objectFit: 'cover' }}
-        />
+        <Image src={imageUrl} alt={name} fill style={{ objectFit: 'cover' }} />
       </Box>
 
       {/* 농부 정보 */}
-      <VStack $css={{ gap: '$075', flex: '1', alignItems: 'flex-start' }}>
-        <Text typography="body2" foreground="normal-200" $css={{ fontWeight: '600' }}>
-          {name}
-        </Text>
-        {location && (
-          <Text typography="body4" foreground="hint-100">
-            {location}
+      <VStack $css={{ gap: '$200', flex: '1', alignItems: 'flex-start' }}>
+        {/* 농부 이름 + 화살표 */}
+        <HStack
+          $css={{
+            gap: '$100',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: '100%',
+          }}
+        >
+          <Text typography="body1" $css={{ fontWeight: '800' }}>
+            {name}
           </Text>
-        )}
-        {description && (
-          <Text typography="body4" foreground="hint-100">
-            {description}
-          </Text>
-        )}
-        {(percent !== undefined || totalSellCnt !== undefined) && (
-          <HStack $css={{ gap: '$150', marginTop: '$050' }}>
-            {percent !== undefined && (
-              <VStack $css={{ gap: '$025', alignItems: 'flex-start' }}>
-                <Text typography="body4" foreground="hint-100">재구매율</Text>
-                <Text typography="body3" $css={{ fontWeight: '700', color: 'var(--vapor-color-orange-500)' }}>
-                  {percent}%
-                </Text>
-              </VStack>
-            )}
-            {totalSellCnt !== undefined && (
-              <VStack $css={{ gap: '$025', alignItems: 'flex-start' }}>
-                <Text typography="body4" foreground="hint-100">누적판매</Text>
-                <Text typography="body3" foreground="normal-200" $css={{ fontWeight: '700' }}>
-                  {totalSellCnt.toLocaleString()}건
-                </Text>
-              </VStack>
-            )}
-          </HStack>
-        )}
+          <ChevronRightOutlineIcon
+            width="24"
+            height="24"
+            style={{ color: '#000' }}
+          />
+        </HStack>
+
+        {/* 위치 + 설명 (뱃지) */}
+        <HStack $css={{ gap: '$050', alignItems: 'center', flexWrap: 'wrap' }}>
+          {location && (
+            <Text typography="body4" $css={{ color: '#4C4C4C' }}>
+              {location}
+            </Text>
+          )}
+          {description && (
+            <Box
+              $css={{
+                backgroundColor: '$canvas-100',
+                paddingLeft: '$075',
+                paddingRight: '$075',
+                paddingTop: '$040',
+                paddingBottom: '$040',
+                borderRadius: '$150',
+              }}
+            >
+              <Text
+                typography="body4"
+                $css={{ color: '#4C4C4C', fontWeight: '500' }}
+              >
+                {description}
+              </Text>
+            </Box>
+          )}
+        </HStack>
+
+        {/* 재구매율 + 누적판매 */}
+        <HStack $css={{ gap: '$300', alignItems: 'center' }}>
+          {percent !== undefined && (
+            <HStack $css={{ gap: '$075', alignItems: 'center' }}>
+              <SignalPowerOutlineIcon
+                width="16"
+                height="16"
+                style={{ color: '#4C4C4C' }}
+              />
+              <Text
+                typography="body4"
+                $css={{ color: '#000', fontWeight: '600' }}
+              >
+                재구매율 {percent}%
+              </Text>
+            </HStack>
+          )}
+          {totalSellCnt !== undefined && (
+            <HStack $css={{ gap: '$075', alignItems: 'center' }}>
+              <CheckCartOutlineIcon
+                width="16"
+                height="16"
+                style={{ color: '#4C4C4C' }}
+              />
+              <Text
+                typography="body4"
+                $css={{ color: '#000', fontWeight: '600' }}
+              >
+                누적판매 {totalSellCnt.toLocaleString()}건
+              </Text>
+            </HStack>
+          )}
+        </HStack>
       </VStack>
     </HStack>
   );

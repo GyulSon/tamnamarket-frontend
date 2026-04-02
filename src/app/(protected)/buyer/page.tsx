@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { BottomNav, BottomNavTab } from '@/components/BottomNav';
 import SectionContainer from '@/components/SectionContainer';
 import { AppHeader } from '@/components/AppHeader';
-import { VStack } from '@vapor-ui/core';
+import { VStack, Box } from '@vapor-ui/core';
 
 const SCREENS: Record<BottomNavTab, React.ReactNode> = {
   home: <BuyerHome />,
@@ -20,15 +20,19 @@ const SCREENS: Record<BottomNavTab, React.ReactNode> = {
 const BuyerPage = () => {
   const [activeTab, setActiveTab] = useState<BottomNavTab>('home');
   return (
-    <div style={{ position: 'relative' }}>
-      <SectionContainer pb={false}>
-        <VStack $css={{ paddingBottom: '84px' }}>
+    <Box $css={{ position: 'relative' }}>
+      <SectionContainer
+        $css={{
+          marginBottom: '80px',
+        }}
+      >
+        <VStack>
           <AppHeader />
           {SCREENS[activeTab]}
         </VStack>
       </SectionContainer>
       <BottomNav activeTab={activeTab} onTabChange={setActiveTab} />
-    </div>
+    </Box>
   );
 };
 

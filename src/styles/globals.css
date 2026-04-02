@@ -61,7 +61,7 @@ body {
 
 body {
   font-family:
-    'CustomFont',
+    'var(--vapor-typography-fontFamily-sans)',
     -apple-system,
     BlinkMacSystemFont,
     'Segoe UI',

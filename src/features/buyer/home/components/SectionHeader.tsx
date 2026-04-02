@@ -7,11 +7,19 @@ interface SectionHeaderProps {
   onMoreClick?: () => void;
 }
 
-export function SectionHeader({ title, subtitle, onMoreClick }: SectionHeaderProps) {
+export function SectionHeader({
+  title,
+  subtitle,
+  onMoreClick,
+}: SectionHeaderProps) {
   return (
     <HStack $css={{ justifyContent: 'space-between', alignItems: 'center' }}>
       <VStack $css={{ gap: '$025' }}>
-        <Text typography="heading4" foreground="normal-200" $css={{ fontWeight: '700' }}>
+        <Text
+          typography="heading4"
+          foreground="normal-200"
+          $css={{ fontWeight: '700' }}
+        >
           {title}
         </Text>
         {subtitle && (
@@ -31,7 +39,11 @@ export function SectionHeader({ title, subtitle, onMoreClick }: SectionHeaderPro
           cursor: 'pointer',
         }}
       >
-        <Text typography="body3" foreground="normal-200" $css={{ fontWeight: '500' }}>
+        <Text
+          typography="body3"
+          foreground="normal-200"
+          $css={{ fontWeight: '500' }}
+        >
           더보기
         </Text>
         <ChevronRightOutlineIcon width={16} height={16} />

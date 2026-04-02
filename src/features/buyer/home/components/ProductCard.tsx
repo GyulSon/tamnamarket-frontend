@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { Box, VStack, Text } from '@vapor-ui/core';
+import { Box, VStack, Text, HStack } from '@vapor-ui/core';
 
 interface ProductCardProps {
   imageUrl?: string;
@@ -44,35 +44,45 @@ export function ProductCard({
           position: 'relative',
         }}
       >
-        <Image
-          src={imageUrl}
-          alt={title}
-          fill
-          style={{ objectFit: 'cover' }}
-        />
+        <Image src={imageUrl} alt={title} fill style={{ objectFit: 'cover' }} />
       </Box>
 
       {/* 상품 정보 */}
       <VStack $css={{ gap: '$050', width: '100%' }}>
-        {location && (
-          <Text typography="body4" foreground="hint-100">
-            {location} · {name}
-          </Text>
-        )}
-        <Text typography="body3" foreground="normal-200" $css={{ fontWeight: '600' }}>
+        <Text
+          typography="body3"
+          foreground="normal-200"
+          $css={{ fontWeight: '600', textAlign: 'left' }}
+        >
           {title}
         </Text>
+        {location && (
+          <Text typography="body4" foreground="hint-100" $css={{ textAlign: 'left' }}>
+            {location} {name}
+          </Text>
+        )}
+
         {price !== undefined && (
-          <VStack $css={{ gap: '$025' }}>
+          <HStack $css={{ gap: '$100' }}>
             {salePercent !== undefined && (
-              <Text typography="body4" $css={{ color: 'var(--vapor-color-orange-500)', fontWeight: '700' }}>
+              <Text
+                typography="body3"
+                $css={{
+                  color: 'var(--vapor-color-orange-500)',
+                  fontWeight: '500',
+                }}
+              >
                 {salePercent}%
               </Text>
             )}
-            <Text typography="body3" foreground="normal-200" $css={{ fontWeight: '700' }}>
+            <Text
+              typography="body3"
+              foreground="normal-200"
+              $css={{ fontWeight: '700' }}
+            >
               {price.toLocaleString()}원
             </Text>
-          </VStack>
+          </HStack>
         )}
       </VStack>
     </VStack>
