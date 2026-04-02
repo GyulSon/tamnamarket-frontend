@@ -11,7 +11,7 @@ interface BottomNavProps {
 const TABS: { id: BottomNavTab; label: string; icon: string }[] = [
   { id: 'home', label: '홈', icon: 'lucide:home' },
   { id: 'farmers', label: '농부들', icon: 'lucide:users' },
-  { id: 'products', label: '농산물', icon: 'lucide:leaf' },
+  { id: 'products', label: '특산품', icon: 'lucide:leaf' },
   { id: 'my', label: '마이', icon: 'lucide:user' },
 ];
 
