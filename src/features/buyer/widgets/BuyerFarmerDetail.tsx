@@ -5,91 +5,18 @@ import { ImageCarousel } from '../productDetail/components/ImageCarousel';
 import { ProductActions } from '../productDetail/components/ProductActions';
 import { FarmerCard, ProductCard } from '@/features/buyer/home/components';
 import { ProductCardHorizontal } from '@/features/buyer/home/components/ProductCardHorizontal';
+import { MOCK_FARMERS, MOCK_PRODUCTS } from '@/mocks';
 
+const farmer = MOCK_FARMERS[2]; // 이제주 농부
+const farmerProducts = MOCK_PRODUCTS.filter((p) => p.farmerId === farmer.id);
 const mockProduct = {
   id: '1',
   farmer: {
-    id: '3',
-    name: '이제주 농부',
-    location: '구좌읍',
-    description: '농사 경력 40년',
-    percent: 87,
-    totalSellCnt: 582,
-    profileUrls: [
-      '/images/mock/buyer/product1.png',
-      '/images/mock/buyer/product2.png',
-      '/images/mock/buyer/product3.png',
-      '/images/mock/buyer/product4.png',
-    ],
+    ...farmer,
+    percent: farmer.percent,
+    totalSellCnt: farmer.totalSellCnt,
   },
-  products: [
-    {
-      id: '1',
-      title: '애월 햇청귤',
-      location: '애월읍',
-      farmerName: '김순자 할망',
-      salePercent: 17,
-      price: 28000,
-      category: '감귤류',
-      regesterDate: '2023-01-01',
-      imageUrl: '/images/mock/buyer/product1.png',
-    },
-    {
-      id: '2',
-      title: '구좌 유기농 당근',
-      location: '구좌읍',
-      farmerName: '이제주 농부',
-      salePercent: 25,
-      price: 15000,
-      category: '채소',
-      regesterDate: '2023-01-01',
-      imageUrl: '/images/mock/buyer/product2.png',
-    },
-    {
-      id: '3',
-      title: '서귀포 봄동',
-      location: '서귀포',
-      farmerName: '박영수 삼촌',
-      salePercent: 12,
-      price: 12000,
-      category: '채소',
-      regesterDate: '2023-01-01',
-      imageUrl: '/images/mock/buyer/product3.png',
-    },
-    {
-      id: '4',
-      title: '구좌 자연산 전복',
-      location: '구좌읍',
-      farmerName: '오분자기 해녀',
-      salePercent: 0,
-      price: 45000,
-      category: '해산물',
-      regesterDate: '2023-01-01',
-      imageUrl: '/images/mock/buyer/product4.png',
-    },
-    {
-      id: '5',
-      title: '한림 신선 한라봉',
-      location: '한림읍',
-      farmerName: '강한라 농부',
-      salePercent: 10,
-      price: 22000,
-      category: '감귤류',
-      regesterDate: '2023-01-01',
-      imageUrl: '/images/mock/buyer/product5.png',
-    },
-    {
-      id: '6',
-      title: '제주 흑돼지 감자',
-      location: '조천읍',
-      farmerName: '홍길동 농부',
-      salePercent: 5,
-      price: 8000,
-      category: '채소',
-      regesterDate: '2023-01-01',
-      imageUrl: '/images/mock/buyer/product6.png',
-    },
-  ],
+  products: farmerProducts,
 };
 
 export const BuyerFarmerDetail = () => {

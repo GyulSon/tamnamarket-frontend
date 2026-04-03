@@ -10,6 +10,7 @@ import {
   ProductGridItem,
 } from '../products/components';
 import { InfoCircleIcon } from '@vapor-ui/icons';
+import { MOCK_PRODUCTS } from '@/mocks';
 
 type Category = '전체' | '감귤류' | '우도 땅콩' | '고사리' | '구좌 당근';
 type SortOption = '최신순' | '인기순' | '낮은가격순' | '높은가격순';
@@ -21,69 +22,6 @@ const CATEGORY_DESCRIPTIONS: Record<Category, string> = {
   '고사리': '청정 제주 오름에서 자란 향 깊은 봄나물',
   '구좌 당근': '겨울 바닷바람 맞고 자라 당도가 남다른 대표 작물',
 };
-
-const MOCK_PRODUCTS = [
-  {
-    id: '1',
-    title: '애월 햇청귤',
-    location: '애월읍',
-    farmerName: '김순자 할망',
-    salePercent: 17,
-    price: 28000,
-    category: '감귤류',
-    imageUrl: '/images/mock/buyer/product1.png',
-  },
-  {
-    id: '2',
-    title: '구좌 유기농 당근',
-    location: '구좌읍',
-    farmerName: '이제주 농부',
-    salePercent: 25,
-    price: 15000,
-    category: '채소',
-    imageUrl: '/images/mock/buyer/product2.png',
-  },
-  {
-    id: '3',
-    title: '서귀포 봄동',
-    location: '서귀포',
-    farmerName: '박영수 삼촌',
-    salePercent: 12,
-    price: 12000,
-    category: '채소',
-    imageUrl: '/images/mock/buyer/product3.png',
-  },
-  {
-    id: '4',
-    title: '구좌 자연산 전복',
-    location: '구좌읍',
-    farmerName: '오분자기 해녀',
-    salePercent: 0,
-    price: 45000,
-    category: '해산물',
-    imageUrl: '/images/mock/buyer/product4.png',
-  },
-  {
-    id: '5',
-    title: '한림 신선 한라봉',
-    location: '한림읍',
-    farmerName: '강한라 농부',
-    salePercent: 10,
-    price: 22000,
-    category: '감귤류',
-    imageUrl: '/images/mock/buyer/product5.png',
-  },
-  {
-    id: '6',
-    title: '제주 흑돼지 감자',
-    location: '조천읍',
-    farmerName: '홍길동 농부',
-    salePercent: 5,
-    price: 8000,
-    category: '채소',
-    imageUrl: '/images/mock/buyer/product6.png',
-  },
-];
 
 
 function filterAndSort(

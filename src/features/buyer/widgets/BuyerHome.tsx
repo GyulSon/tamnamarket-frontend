@@ -12,60 +12,7 @@ import {
 } from '../home/components';
 import Image from 'next/image';
 import { HeartIcon } from '@vapor-ui/icons';
-
-const MOCK_PRODUCTS = [
-  {
-    id: '1',
-    title: '애월 햇청귤',
-    location: '애월읍',
-    name: '김순자 할망',
-    salePercent: 17,
-    price: 28000,
-  },
-  {
-    id: '2',
-    title: '구좌 유기농 당근',
-    location: '구좌읍',
-    name: '이제주 농부',
-    salePercent: 25,
-    price: 15000,
-  },
-  {
-    id: '3',
-    title: '서귀포 봄동',
-    location: '서귀포',
-    name: '박영수 삼촌',
-    salePercent: 12,
-    price: 12000,
-  },
-];
-
-const MOCK_FARMERS = [
-  {
-    id: '1',
-    name: '김순자 할망',
-    location: '애월읍',
-    description: '농사 경력 40년',
-    percent: 87,
-    totalSellCnt: 582,
-  },
-  {
-    id: '2',
-    name: '박영수 삼촌',
-    location: '서귀포',
-    description: '농사 경력 40년',
-    percent: 87,
-    totalSellCnt: 582,
-  },
-  {
-    id: '3',
-    name: '이제주 농부',
-    location: '구좌읍',
-    description: '농사 경력 40년',
-    percent: 87,
-    totalSellCnt: 582,
-  },
-];
+import { MOCK_PRODUCTS, MOCK_FARMERS } from '@/mocks';
 
 export function BuyerHome() {
   const router = useRouter();
@@ -192,7 +139,7 @@ export function BuyerHome() {
                 <ProductCard
                   title={product.title}
                   location={product.location}
-                  name={product.name}
+                  name={product.farmerName}
                   salePercent={product.salePercent}
                   price={product.price}
                 />

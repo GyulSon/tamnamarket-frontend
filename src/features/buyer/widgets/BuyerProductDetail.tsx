@@ -7,31 +7,27 @@ import { ProductActions } from '../productDetail/components/ProductActions';
 import { PublishOutlineIcon } from '@vapor-ui/icons';
 import { FarmerCard } from '@/features/buyer/home/components';
 import { useRouter } from 'next/navigation';
+import { MOCK_PRODUCTS, MOCK_FARMERS } from '@/mocks';
 
 export const BuyerProductDetail = () => {
   const router = useRouter();
-  // Mock 데이터
+  const product = MOCK_PRODUCTS[0];
+  const farmer = MOCK_FARMERS.find((f) => f.id === product.farmerId) ?? MOCK_FARMERS[0];
   const mockProduct = {
-    id: '1',
-    title: '햇청귤 2kg 한 박스(특품)',
-    category: '감귤류',
-    currentPrice: '28,000원',
-    originalPrice: '32,000원',
-    images: [
-      '/images/mock/buyer/product1.png',
-      '/images/mock/buyer/product1.png',
-      '/images/mock/buyer/product1.png',
-      '/images/mock/buyer/product1.png',
-    ],
-    description:
-      '애월읍 김순자 할망께서 40년 경력으로 정성껏 재배하신 햇청귤입니다. 올해는 일교차가 커서 당도가 특히 높으며, 비타민C가 풍부해 환절기 건강관리에 좋습니다. 농약을 최소화하고 유기농 퇴비로 키워 안심하고 드실 수 있습니다.',
+    id: product.id,
+    title: product.title,
+    category: product.category,
+    currentPrice: `${product.price.toLocaleString()}원`,
+    originalPrice: product.originalPrice ? `${product.originalPrice.toLocaleString()}원` : '',
+    images: [product.imageUrl, product.imageUrl, product.imageUrl, product.imageUrl],
+    description: product.description ?? '',
     farmer: {
-      id: '3',
-      name: '이제주 농부',
-      location: '구좌읍',
-      description: '농사 경력 40년',
-      percent: 87,
-      totalSellCnt: 582,
+      id: farmer.id,
+      name: farmer.name,
+      location: farmer.location,
+      description: farmer.description,
+      percent: farmer.percent,
+      totalSellCnt: farmer.totalSellCnt,
     },
   };
 

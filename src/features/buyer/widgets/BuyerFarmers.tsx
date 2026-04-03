@@ -3,33 +3,7 @@
 import { useState } from 'react';
 import { Box, VStack, Text, Tabs } from '@vapor-ui/core';
 import { FarmerCard } from '@/features/buyer/home/components';
-
-const MOCK_FARMERS = [
-  {
-    id: '1',
-    name: '김순자 할망',
-    location: '애월읍',
-    description: '농사 경력 40년',
-    percent: 87,
-    totalSellCnt: 582,
-  },
-  {
-    id: '2',
-    name: '박영수 삼촌',
-    location: '서귀포',
-    description: '농사 경력 40년',
-    percent: 87,
-    totalSellCnt: 582,
-  },
-  {
-    id: '3',
-    name: '이제주 농부',
-    location: '구좌읍',
-    description: '농사 경력 40년',
-    percent: 87,
-    totalSellCnt: 582,
-  },
-];
+import { MOCK_FARMERS } from '@/mocks';
 
 export function BuyerFarmers() {
   const [activeTab, setActiveTab] = useState('all');
