@@ -1,6 +1,6 @@
 // 프로젝트 목업 API 파일
-import { mockProjects } from '@/mocks';
 import { BASE_URL } from '@/lib/constants/app';
+import { mockProjects } from '@/mocks';
 import { Test } from '@/types';
 
 export async function getMockProjects(): Promise<Test[]> {
@@ -32,7 +32,7 @@ const isRecord = (value: unknown): value is Record<string, unknown> =>
 const pickFirstString = (...values: unknown[]) => {
   const matchedValue = values.find(
     (value): value is string =>
-      typeof value === 'string' && value.trim().length > 0,
+      typeof value === 'string' && value.trim().length > 0
   );
 
   return matchedValue?.trim();
@@ -74,7 +74,7 @@ const pickFirstPrice = (...values: unknown[]) => {
   const matchedValue = values.find(
     (value): value is number | string =>
       (typeof value === 'number' && Number.isFinite(value)) ||
-      (typeof value === 'string' && value.trim().length > 0),
+      (typeof value === 'string' && value.trim().length > 0)
   );
 
   if (typeof matchedValue === 'string') {
@@ -126,7 +126,7 @@ const getApiPayload = (payload: unknown) => {
 };
 
 const normalizeSaleClassificationResponse = (
-  payload: unknown,
+  payload: unknown
 ): SaleClassificationResponse => {
   if (typeof payload === 'string') {
     return {
@@ -154,14 +154,14 @@ const normalizeSaleClassificationResponse = (
     productId: pickFirstNumber(
       content.productId,
       content.product_id,
-      content.id,
+      content.id
     ),
     result:
       pickFirstString(
         content.result,
         content.category,
         content.categoryLabel,
-        content.classification,
+        content.classification
       ) ?? '',
   };
 };
@@ -180,37 +180,37 @@ const normalizeSaleDraftResponse = (payload: unknown): SaleDraftResponse => {
       draft.description,
       draft.content,
       draft.summary,
-      draft.saleContent,
+      draft.saleContent
     ),
     recommendedPrice: pickFirstPrice(
       draft.recommendedPrice,
       draft.price,
       draft.suggestedPrice,
       draft.recommendPrice,
-      draft.recommended_price,
+      draft.recommended_price
     ),
     priceReason: pickFirstString(
       draft.priceReason,
       draft.pricingReason,
       draft.reason,
-      draft.price_reason,
+      draft.price_reason
     ),
     sellerMessage: pickFirstString(
       draft.sellerMessage,
       draft.messageToBuyer,
       draft.commentToBuyer,
-      draft.voiceSummary,
+      draft.voiceSummary
     ),
     categoryLabel: pickFirstString(
       draft.categoryLabel,
       draft.category,
-      draft.classification,
+      draft.classification
     ),
   };
 };
 
 export async function classifySaleImage(
-  file: File,
+  file: File
 ): Promise<SaleClassificationResponse> {
   const formData = new FormData();
   formData.append('file', file, file.name);
@@ -224,7 +224,8 @@ export async function classifySaleImage(
 
   if (!response.ok || isFailedApiResponse(responseJson)) {
     throw new Error(
-      getApiMessage(responseJson) ?? '품종 분류에 실패했어요. 다시 시도해주세요.'
+      getApiMessage(responseJson) ??
+        '품종 분류에 실패했어요. 다시 시도해주세요.'
     );
   }
 
@@ -239,7 +240,7 @@ export async function classifySaleImage(
 
 export async function submitSaleVoiceAnswers(
   productId: number,
-  files: File[],
+  files: File[]
 ): Promise<SaleDraftResponse> {
   const formData = new FormData();
   formData.append('product_id', String(productId));

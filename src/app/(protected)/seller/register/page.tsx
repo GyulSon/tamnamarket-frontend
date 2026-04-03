@@ -75,7 +75,7 @@ const buildSaleDraft = (
     recommendedPrice: formatRecommendedPrice(response.recommendedPrice),
     priceReason:
       response.priceReason?.trim() || '지역 시세를 고려하여 책정했어요',
-    description: DEFAULT_PRODUCT_DESCRIPTION,
+    description: response.description?.trim() || DEFAULT_PRODUCT_DESCRIPTION,
     sellerMessage:
       response.sellerMessage?.trim() ||
       `${baseLabel} 정말 자신 있어요. 맛있게 드셔주세요!`,

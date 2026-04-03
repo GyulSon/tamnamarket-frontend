@@ -1,5 +1,9 @@
 import { BASE_URL } from '@/lib/constants/app';
 import type { ApiResponse } from '@/lib/api/types';
+import {
+  getMockSaleClassificationResponse,
+  getMockSaleDraftResponse,
+} from '@/mocks/seller';
 import type {
   ClassificationData,
   PriceData,
@@ -273,8 +277,16 @@ export const saleApi = {
 export async function classifySaleImage(
   file: File
 ): Promise<SaleClassificationResponse> {
-  const responseJson = await saleApi.classification(file);
-  const normalizedResponse = normalizeSaleClassificationResponse(responseJson);
+  let normalizedResponse: SaleClassificationResponse;
+
+  try {
+    const responseJson = await saleApi.classification(file);
+    normalizedResponse = normalizeSaleClassificationResponse(responseJson);
+  } catch {
+    normalizedResponse = normalizeSaleClassificationResponse(
+      await getMockSaleClassificationResponse()
+    );
+  }
 
   if (!normalizedResponse.result) {
     throw new Error('품종 분류 결과를 확인하지 못했어요.');
@@ -287,7 +299,11 @@ export async function submitSaleVoiceAnswers(
   productId: number,
   files: File[]
 ): Promise<SaleDraftResponse> {
-  const responseJson = await saleApi.text(productId, files);
+  try {
+    const responseJson = await saleApi.text(productId, files);
 
-  return normalizeSaleDraftResponse(responseJson);
+    return normalizeSaleDraftResponse(responseJson);
+  } catch {
+    return normalizeSaleDraftResponse(await getMockSaleDraftResponse(productId));
+  }
 }
