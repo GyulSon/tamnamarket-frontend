@@ -13,6 +13,8 @@ import VoiceStep from '@/features/seller/register/components/steps/VoiceStep';
 import {
   type SaleDraftResponse,
   classifySaleImage,
+  getRecommendedSalePrice,
+  getSaleAdDetail,
   submitSaleVoiceAnswers,
 } from '@/entities/seller';
 
@@ -82,6 +84,16 @@ const buildSaleDraft = (
   };
 };
 
+const hasUsableSaleDraft = (draft: SaleDraftResponse) =>
+  Boolean(
+    draft.title?.trim() ||
+      draft.description?.trim() ||
+      (typeof draft.recommendedPrice === 'number' &&
+        Number.isFinite(draft.recommendedPrice)) ||
+      (typeof draft.recommendedPrice === 'string' &&
+        draft.recommendedPrice.trim().length > 0)
+  );
+
 const SellerRegisterPage = () => {
   const router = useRouter();
   const [step, setStep] = useState<RegisterStep>('camera');
@@ -109,7 +121,6 @@ const SellerRegisterPage = () => {
     }
 
     let isCancelled = false;
-    let transitionTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
     const requestClassification = async () => {
       try {
@@ -138,11 +149,9 @@ const SellerRegisterPage = () => {
           getErrorMessage(error, '품종 분류에 실패했어요. 다시 시도해주세요.')
         );
       } finally {
-        transitionTimeoutId = setTimeout(() => {
-          if (!isCancelled) {
-            setStep('imageResult');
-          }
-        }, 0);
+        if (!isCancelled) {
+          setStep('imageResult');
+        }
       }
     };
 
@@ -150,10 +159,6 @@ const SellerRegisterPage = () => {
 
     return () => {
       isCancelled = true;
-
-      if (transitionTimeoutId) {
-        clearTimeout(transitionTimeoutId);
-      }
     };
   }, [capturedPhotoFile, step]);
 
@@ -192,19 +197,25 @@ const SellerRegisterPage = () => {
     setStep('voiceAnalyzing');
 
     try {
-      const nextDraftResponse: SaleDraftResponse = await submitSaleVoiceAnswers(
-        productId,
-        voiceAnswerFiles
-      );
-      const hasDraftContent = Object.values(nextDraftResponse).some((value) => {
-        if (typeof value === 'string') {
-          return value.trim().length > 0;
-        }
+      const [draftResult, priceResult] = await Promise.allSettled([
+        submitSaleVoiceAnswers(productId, voiceAnswerFiles),
+        getRecommendedSalePrice(productId),
+      ]);
+      const saleAdDetail = await getSaleAdDetail(productId).catch(() => null);
+      const nextDraftResponse =
+        draftResult.status === 'fulfilled' ? draftResult.value : null;
+      const priceResponse =
+        priceResult.status === 'fulfilled' ? priceResult.value : null;
+      const nextSaleDraft: SaleDraftResponse = {
+        ...(saleAdDetail ?? {}),
+        ...(nextDraftResponse ?? {}),
+        recommendedPrice:
+          priceResponse?.recommendedPrice ??
+          nextDraftResponse?.recommendedPrice ??
+          saleAdDetail?.recommendedPrice,
+      };
 
-        return value !== undefined && value !== null;
-      });
-
-      if (!hasDraftContent) {
+      if (!hasUsableSaleDraft(nextSaleDraft)) {
         setSubmitError(
           '게시물 초안을 생성하지 못했어요. 음성 답변을 다시 전송해주세요.'
         );
@@ -212,7 +223,7 @@ const SellerRegisterPage = () => {
         return;
       }
 
-      setSaleDraft(buildSaleDraft(nextDraftResponse, classificationResult));
+      setSaleDraft(buildSaleDraft(nextSaleDraft, classificationResult));
       setStep('voiceResult');
     } catch {
       setSubmitError(
