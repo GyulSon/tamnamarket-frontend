@@ -19,6 +19,8 @@ export type {
 
 export {
   classifySaleImage,
+  getRecommendedSalePrice,
+  getSaleAdDetail,
   submitSaleVoiceAnswers,
   type SaleDraftResponse,
 } from './api/sale.api';

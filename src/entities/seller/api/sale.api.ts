@@ -1,9 +1,5 @@
 import { BASE_URL } from '@/lib/constants/app';
 import type { ApiResponse } from '@/lib/api/types';
-import {
-  getMockSaleClassificationResponse,
-  getMockSaleDraftResponse,
-} from '@/mocks/seller';
 import type {
   ClassificationData,
   PriceData,
@@ -23,6 +19,15 @@ export type SaleDraftResponse = {
   recommendedPrice?: number | string;
   sellerMessage?: string;
   title?: string;
+};
+
+type SalePriceResponse = {
+  recommendedPrice?: number | string;
+  productId?: number;
+};
+
+type SaleAdDetailResponse = SaleDraftResponse & {
+  productId?: number;
 };
 
 const isRecord = (value: unknown): value is Record<string, unknown> =>
@@ -177,6 +182,7 @@ const normalizeSaleDraftResponse = (payload: unknown): SaleDraftResponse => {
     title: pickFirstString(draft.title, draft.productTitle, draft.name),
     description: pickFirstString(
       draft.description,
+      draft.final_description,
       draft.content,
       draft.summary,
       draft.saleContent
@@ -204,6 +210,83 @@ const normalizeSaleDraftResponse = (payload: unknown): SaleDraftResponse => {
       draft.categoryLabel,
       draft.category,
       draft.classification
+    ),
+  };
+};
+
+const normalizeSalePriceResponse = (payload: unknown): SalePriceResponse => {
+  const content = getApiPayload(payload);
+
+  if (!isRecord(content)) {
+    return {};
+  }
+
+  return {
+    productId: pickFirstNumber(
+      content.productId,
+      content.product_id,
+      content.id
+    ),
+    recommendedPrice: pickFirstPrice(
+      content.recommendedPrice,
+      content.recommended_price,
+      content.price,
+      content.suggestedPrice
+    ),
+  };
+};
+
+const normalizeSaleAdDetailResponse = (
+  payload: unknown
+): SaleAdDetailResponse => {
+  const content = getApiPayload(payload);
+
+  if (!isRecord(content)) {
+    return {};
+  }
+
+  return {
+    productId: pickFirstNumber(
+      content.productId,
+      content.product_id,
+      content.id
+    ),
+    audioUrl: pickFirstString(
+      content.audioUrl,
+      content.audio_url,
+      content.voiceUrl,
+      content.voice_url
+    ),
+    title: pickFirstString(content.title, content.productTitle, content.name),
+    description: pickFirstString(
+      content.description,
+      content.final_description,
+      content.content,
+      content.summary,
+      content.saleContent
+    ),
+    recommendedPrice: pickFirstPrice(
+      content.recommendedPrice,
+      content.recommended_price,
+      content.price,
+      content.suggestedPrice
+    ),
+    priceReason: pickFirstString(
+      content.priceReason,
+      content.pricingReason,
+      content.reason,
+      content.price_reason
+    ),
+    sellerMessage: pickFirstString(
+      content.sellerMessage,
+      content.messageToBuyer,
+      content.commentToBuyer,
+      content.voiceSummary
+    ),
+    categoryLabel: pickFirstString(
+      content.categoryLabel,
+      content.category,
+      content.classification
     ),
   };
 };
@@ -236,13 +319,15 @@ export const saleApi = {
     voices: File[]
   ): Promise<ApiResponse<SaleTextData>> => {
     const formData = new FormData();
-    formData.append('product_id', String(productId));
     voices.forEach((voice) => formData.append('voices', voice, voice.name));
 
-    const response = await fetch(getApiEndpoint('/api/sale/text'), {
-      method: 'POST',
-      body: formData,
-    });
+    const response = await fetch(
+      getApiEndpoint(`/api/sale/text?product_id=${productId}`),
+      {
+        method: 'POST',
+        body: formData,
+      }
+    );
 
     const responseJson = await getResponseJson(response);
 
@@ -272,21 +357,29 @@ export const saleApi = {
 
     return responseJson as ApiResponse<PriceData>;
   },
+
+  saleAd: async (productId: number) => {
+    const response = await fetch(
+      getApiEndpoint(`/api/sale/salead?product_id=${productId}`)
+    );
+
+    const responseJson = await getResponseJson(response);
+
+    if (!response.ok || isFailedApiResponse(responseJson)) {
+      throw new Error(
+        getApiMessage(responseJson) ?? '게시물 상세 조회에 실패했습니다.'
+      );
+    }
+
+    return responseJson;
+  },
 };
 
 export async function classifySaleImage(
   file: File
 ): Promise<SaleClassificationResponse> {
-  let normalizedResponse: SaleClassificationResponse;
-
-  try {
-    const responseJson = await saleApi.classification(file);
-    normalizedResponse = normalizeSaleClassificationResponse(responseJson);
-  } catch {
-    normalizedResponse = normalizeSaleClassificationResponse(
-      await getMockSaleClassificationResponse()
-    );
-  }
+  const responseJson = await saleApi.classification(file);
+  const normalizedResponse = normalizeSaleClassificationResponse(responseJson);
 
   if (!normalizedResponse.result) {
     throw new Error('품종 분류 결과를 확인하지 못했어요.');
@@ -299,11 +392,23 @@ export async function submitSaleVoiceAnswers(
   productId: number,
   files: File[]
 ): Promise<SaleDraftResponse> {
-  try {
-    const responseJson = await saleApi.text(productId, files);
+  const responseJson = await saleApi.text(productId, files);
 
-    return normalizeSaleDraftResponse(responseJson);
-  } catch {
-    return normalizeSaleDraftResponse(await getMockSaleDraftResponse(productId));
-  }
+  return normalizeSaleDraftResponse(responseJson);
+}
+
+export async function getRecommendedSalePrice(
+  productId: number
+): Promise<SalePriceResponse> {
+  const responseJson = await saleApi.price(productId);
+
+  return normalizeSalePriceResponse(responseJson);
+}
+
+export async function getSaleAdDetail(
+  productId: number
+): Promise<SaleAdDetailResponse> {
+  const responseJson = await saleApi.saleAd(productId);
+
+  return normalizeSaleAdDetailResponse(responseJson);
 }
