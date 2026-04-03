@@ -106,9 +106,6 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
             fontWeight: 600,
             color: '#ffffff',
             textDecoration: 'none',
-            // '& *': {
-            //   color: '#ffffff',
-            // },
           }}
         >
           홈 화면 바로가기

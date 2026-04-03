@@ -1,32 +1,53 @@
 'use client';
 
-import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import OnboardingFirst from '@/features/onboarding/OnboardingFirst';
 import OnboardingThird from '@/features/onboarding/OnboardingThird';
 
+const INTRO_VISIBLE_MS = 650;
+const INTRO_UNMOUNT_MS = 1000;
+
 export default function MainPage() {
-  const [showFirst, setShowFirst] = useState(true);
+  const [isIntroVisible, setIsIntroVisible] = useState(true);
+  const [shouldRenderIntro, setShouldRenderIntro] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      const savedRole = localStorage.getItem('selectedRole');
-      if (savedRole === 'seller') {
-        router.push('/seller');
-      } else if (savedRole === 'buyer') {
-        router.push('/buyer');
-      } else {
-        setShowFirst(false);
-      }
-    }, 1000);
+    const savedRole = localStorage.getItem('selectedRole');
 
-    return () => clearTimeout(timer);
+    if (savedRole === 'seller') {
+      router.push('/seller');
+      return;
+    }
+
+    if (savedRole === 'buyer') {
+      router.push('/buyer');
+      return;
+    }
+
+    const hideTimer = setTimeout(() => {
+      setIsIntroVisible(false);
+    }, INTRO_VISIBLE_MS);
+
+    const unmountTimer = setTimeout(() => {
+      setShouldRenderIntro(false);
+    }, INTRO_UNMOUNT_MS);
+
+    return () => {
+      clearTimeout(hideTimer);
+      clearTimeout(unmountTimer);
+    };
   }, [router]);
 
-  if (showFirst) {
-    return <OnboardingFirst />;
+  if (!shouldRenderIntro) {
+    return <OnboardingThird />;
   }
 
-  return <OnboardingThird />;
+  return (
+    <>
+      <OnboardingThird />
+      <OnboardingFirst isVisible={isIntroVisible} />
+    </>
+  );
 }

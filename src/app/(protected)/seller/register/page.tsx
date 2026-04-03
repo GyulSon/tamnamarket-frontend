@@ -14,7 +14,7 @@ import {
   type SaleDraftResponse,
   classifySaleImage,
   submitSaleVoiceAnswers,
-} from '@/lib/api/project';
+} from '@/entities/seller';
 
 type RegisterStep =
   | 'camera'
@@ -34,7 +34,6 @@ type SaleDraft = {
 };
 
 const DEFAULT_RECOMMENDED_PRICE = '28,000원';
-const PREVIEW_ANALYZING_DURATION_MS = 1200;
 const DEFAULT_PRODUCT_DESCRIPTION =
   '애월읍 김순자 할망께서 40년 경력으로 정성껏 재배하신 햇청귤입니다. 올해는 일교차가 커서 당도가 특히 높으며, 비타민C가 풍부해 환절기 건강관리에 좋습니다. 농약을 최소화하고 유기농 퇴비로 키워 안심하고 드실 수 있습니다.';
 const getErrorMessage = (error: unknown, fallbackMessage: string) =>
@@ -76,23 +75,10 @@ const buildSaleDraft = (
     recommendedPrice: formatRecommendedPrice(response.recommendedPrice),
     priceReason:
       response.priceReason?.trim() || '지역 시세를 고려하여 책정했어요',
-    description: DEFAULT_PRODUCT_DESCRIPTION,
+    description: response.description?.trim() || DEFAULT_PRODUCT_DESCRIPTION,
     sellerMessage:
       response.sellerMessage?.trim() ||
       `${baseLabel} 정말 자신 있어요. 맛있게 드셔주세요!`,
-  };
-};
-
-const buildMockSaleDraft = (classificationResult: string): SaleDraft => {
-  const baseLabel = classificationResult.trim() || '특산품';
-
-  return {
-    categoryLabel: baseLabel,
-    title: `${baseLabel} 2kg 한 박스(특품)`,
-    recommendedPrice: DEFAULT_RECOMMENDED_PRICE,
-    priceReason: '지역 시세를 고려하여 책정했어요.',
-    description: DEFAULT_PRODUCT_DESCRIPTION,
-    sellerMessage: `${baseLabel} 신선하게 준비했어요. 지금은 등록 플로우 확인을 위한 예시 문구예요.`,
   };
 };
 
@@ -108,7 +94,6 @@ const SellerRegisterPage = () => {
   const [saleDraft, setSaleDraft] = useState<SaleDraft | null>(null);
   const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isPreviewBypassMode, setIsPreviewBypassMode] = useState(false);
   const stepIndexMap: Record<RegisterStep, number> = {
     camera: 0,
     imageAnalyzing: 1,
@@ -181,25 +166,6 @@ const SellerRegisterPage = () => {
   }, [capturedPhotoPreviewUrl]);
 
   const handleSubmitVoiceAnswers = useCallback(async () => {
-    if (isPreviewBypassMode) {
-      setIsSubmitting(true);
-      setSubmitError('');
-      setStep('voiceAnalyzing');
-
-      try {
-        await new Promise((resolve) => {
-          setTimeout(resolve, PREVIEW_ANALYZING_DURATION_MS);
-        });
-
-        setSaleDraft(buildMockSaleDraft(classificationResult));
-        setStep('voiceResult');
-      } finally {
-        setIsSubmitting(false);
-      }
-
-      return;
-    }
-
     if (!voiceAnswerFiles.length) {
       setSubmitError('전송할 음성 답변이 없어요.');
       return;
@@ -256,7 +222,7 @@ const SellerRegisterPage = () => {
     } finally {
       setIsSubmitting(false);
     }
-  }, [classificationResult, isPreviewBypassMode, productId, voiceAnswerFiles]);
+  }, [classificationResult, productId, voiceAnswerFiles]);
 
   const currentStepIndex = stepIndexMap[step];
 
@@ -304,7 +270,6 @@ const SellerRegisterPage = () => {
                 setVoiceAnswerFiles([]);
                 setSaleDraft(null);
                 setSubmitError('');
-                setIsPreviewBypassMode(false);
                 setStep('imageAnalyzing');
               }}
             />
@@ -331,13 +296,7 @@ const SellerRegisterPage = () => {
                 setSubmitError('');
                 setVoiceAnswerFiles([]);
                 setSaleDraft(null);
-                setIsPreviewBypassMode(false);
                 setStep('camera');
-              }}
-              onBypassConfirm={() => {
-                setSubmitError('');
-                setIsPreviewBypassMode(true);
-                setStep('voice');
               }}
               onConfirm={() => {
                 if (
@@ -349,7 +308,6 @@ const SellerRegisterPage = () => {
                 }
 
                 setSubmitError('');
-                setIsPreviewBypassMode(false);
                 setStep('voice');
               }}
             />
