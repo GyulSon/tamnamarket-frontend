@@ -2,12 +2,13 @@
 import type { Metadata, Viewport } from 'next';
 
 import { Providers } from '@/app/providers';
-import { APP_DESCRIPTION, APP_NAME } from '@/lib/constants/app';
+import { APP_DESCRIPTION, APP_NAME, BASE_URL } from '@/lib/constants/app';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
   title: APP_NAME,
   description: APP_DESCRIPTION,
+  metadataBase: new URL(BASE_URL),
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,

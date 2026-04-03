@@ -11,7 +11,6 @@ type ImageResultStepProps = {
   previewUrl: string;
   onRetry: () => void;
   onConfirm: () => void;
-  onBypassConfirm?: () => void;
 };
 
 const ImageResultStep = ({
@@ -21,11 +20,9 @@ const ImageResultStep = ({
   previewUrl,
   onRetry,
   onConfirm,
-  onBypassConfirm,
 }: ImageResultStepProps) => {
   const hasError = Boolean(errorMessage);
   const resultLabel = classificationResult?.trim();
-  const shouldShowBypassButton = isConfirmDisabled && Boolean(onBypassConfirm);
 
   return (
     <Box
@@ -198,7 +195,7 @@ const ImageResultStep = ({
                   flex: 1,
                   height: '48px',
                   borderRadius: '12px',
-                  backgroundColor: isConfirmDisabled ? '#efb184' : undefined,
+                  backgroundColor: isConfirmDisabled ? '#f8c9a6' : undefined,
                   opacity: isConfirmDisabled ? 1 : undefined,
                   fontWeight: 500,
                 }}
@@ -206,23 +203,6 @@ const ImageResultStep = ({
                 네 맞아요
               </Button>
             </Box>
-
-            {shouldShowBypassButton ? (
-              <Button
-                onClick={onBypassConfirm}
-                $css={{
-                  width: '100%',
-                  height: '44px',
-                  borderRadius: '12px',
-                  backgroundColor: '#dc2626',
-                  color: '#ffffff',
-                  fontWeight: 700,
-                  border: 'none',
-                }}
-              >
-                UI 확인용 다음 화면 보기
-              </Button>
-            ) : null}
           </VStack>
         </VStack>
       </VStack>

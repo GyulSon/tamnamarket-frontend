@@ -1,5 +1,6 @@
 // 프로젝트 목업 API 파일
 import { mockProjects } from '@/mocks';
+import { BASE_URL } from '@/lib/constants/app';
 import { Test } from '@/types';
 
 export async function getMockProjects(): Promise<Test[]> {
@@ -84,7 +85,7 @@ const pickFirstPrice = (...values: unknown[]) => {
 };
 
 const getApiEndpoint = (path: string) => {
-  const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL?.trim() ?? '';
+  const baseUrl = BASE_URL.trim().replace(/\/+$/, '');
 
   return `${baseUrl}${path}`;
 };

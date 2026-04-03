@@ -758,7 +758,7 @@ const VoiceStep = ({
             backgroundColor:
               canSubmit && !isSubmitting
                 ? '#ee7e38'
-                : '#efb184',
+                : '#f8c9a6',
             color: '#ffffff',
             fontWeight: 500,
             border: 'none',
