@@ -167,6 +167,7 @@ export const BuyerProductDetail = () => {
             }}
           >
             <FarmerCard
+              id={mockProduct.farmer.id}
               radius={true}
               key={mockProduct.farmer.id}
               name={mockProduct.farmer.name}

@@ -7,20 +7,19 @@ import { FarmerCard, ProductCard } from '@/features/buyer/home/components';
 import { ProductCardHorizontal } from '@/features/buyer/home/components/ProductCardHorizontal';
 import { MOCK_FARMERS, MOCK_PRODUCTS } from '@/mocks';
 
-const farmer = MOCK_FARMERS[2]; // 이제주 농부
-const farmerProducts = MOCK_PRODUCTS.filter((p) => p.farmerId === farmer.id);
-const mockProduct = {
-  id: '1',
-  farmer: {
-    ...farmer,
-    percent: farmer.percent,
-    totalSellCnt: farmer.totalSellCnt,
-  },
-  products: farmerProducts,
-};
+interface BuyerFarmerDetailProps {
+  farmerId: string;
+}
 
-export const BuyerFarmerDetail = () => {
+export const BuyerFarmerDetail = ({ farmerId }: BuyerFarmerDetailProps) => {
   const router = useRouter();
+  const farmer = MOCK_FARMERS.find((f) => f.id === farmerId) ?? MOCK_FARMERS[0];
+  const farmerProducts = MOCK_PRODUCTS.filter((p) => p.farmerId === farmer.id);
+  const mockProduct = {
+    id: farmer.id,
+    farmer,
+    products: farmerProducts,
+  };
   const handleLike = () => {};
 
   return (

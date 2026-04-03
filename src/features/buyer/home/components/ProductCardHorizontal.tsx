@@ -61,7 +61,7 @@ export function ProductCardHorizontal({
         >
           {title}
         </Text>
-        {location && (
+        {regesterDate && (
           <Text
             typography="body4"
             foreground="hint-100"

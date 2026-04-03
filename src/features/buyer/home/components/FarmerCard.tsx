@@ -8,6 +8,7 @@ import {
 import { useRouter } from 'next/navigation';
 
 interface FarmerCardProps {
+  id?: string;
   imageUrl?: string;
   name?: string;
   location?: string;
@@ -20,6 +21,7 @@ interface FarmerCardProps {
 }
 
 export function FarmerCard({
+  id,
   isFarmerDetail = false,
   imageUrl = '/images/mock/buyer/product5.png',
   name = '농부 이름',
@@ -32,7 +34,7 @@ export function FarmerCard({
 }: FarmerCardProps) {
   const router = useRouter();
   const handleClick = () => {
-    router.push(`/buyer/farmer/1`);
+    if (id) router.push(`/buyer/farmer/${id}`);
   };
   return (
     <HStack

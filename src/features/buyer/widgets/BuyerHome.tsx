@@ -199,6 +199,7 @@ export function BuyerHome() {
           <VStack $css={{ gap: '$200' }}>
             {MOCK_FARMERS.map((farmer) => (
               <FarmerCard
+                id={farmer.id}
                 key={farmer.id}
                 imageUrl={farmer.profileUrls[0]}
                 name={farmer.name}
