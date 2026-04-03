@@ -52,12 +52,7 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
               backgroundColor: '#ee7238',
             }}
           >
-            <Icon
-              icon="lucide:check"
-              width="28"
-              height="28"
-              color="#ffffff"
-            />
+            <Icon icon="lucide:check" width="28" height="28" color="#ffffff" />
           </Box>
 
           <VStack
@@ -111,9 +106,9 @@ const RegisterCompletePage = ({ title }: RegisterCompletePageProps) => {
             fontWeight: 600,
             color: '#ffffff',
             textDecoration: 'none',
-            '& *': {
-              color: '#ffffff',
-            },
+            // '& *': {
+            //   color: '#ffffff',
+            // },
           }}
         >
           홈 화면 바로가기

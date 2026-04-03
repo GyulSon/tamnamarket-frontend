@@ -109,6 +109,7 @@ export function BuyerFarmers() {
               {MOCK_FARMERS.map((farmer) => (
                 <FarmerCard
                   key={farmer.id}
+                  imageUrl={farmer.profileUrls[0]}
                   name={farmer.name}
                   location={farmer.location}
                   description={farmer.description}

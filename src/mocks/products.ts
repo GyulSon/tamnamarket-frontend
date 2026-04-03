@@ -40,7 +40,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 39000,
     category: '감귤류',
     regesterDate: '2026-03-25',
-    imageUrl: '/mock/감귤류/2.png',
+    imageUrl: '/mock/감귤류/2.jpg',
     description: '한림읍에서 GAP 인증을 받은 천혜향입니다. 과즙이 풍부하고 향이 진하며 선물용으로 인기가 많습니다.',
   },
   {
@@ -54,7 +54,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 38000,
     category: '감귤류',
     regesterDate: '2026-03-30',
-    imageUrl: '/mock/감귤류/3.png',
+    imageUrl: '/mock/감귤류/3.jpg',
     description: '남원읍 홍감귤 할르방이 25년간 레드향만 전문으로 재배해온 특품입니다. 껍질이 얇고 당도 13brix 이상만 선별했습니다.',
   },
   {
@@ -68,7 +68,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 22000,
     category: '감귤류',
     regesterDate: '2026-03-20',
-    imageUrl: '/mock/감귤류/4.png',
+    imageUrl: '/mock/감귤류/4.jpg',
     description: '서귀포 유기농 인증 노지감귤입니다. 태양을 듬뿍 받아 새콤달콤한 맛이 일품이며, 가정용으로 넉넉한 5kg 구성입니다.',
   },
   {
@@ -82,7 +82,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 33000,
     category: '감귤류',
     regesterDate: '2026-04-01',
-    imageUrl: '/mock/감귤류/5.png',
+    imageUrl: '/mock/감귤류/5.jpg',
     description: '성산 일출봉 근처에서 해풍을 맞고 자란 한라봉입니다. 꼭지가 볼록하고 과즙이 넘치는 프리미엄 한라봉입니다.',
   },
   {
@@ -96,7 +96,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 27000,
     category: '감귤류',
     regesterDate: '2026-03-22',
-    imageUrl: '/mock/감귤류/6.png',
+    imageUrl: '/mock/감귤류/6.jpg',
     description: '한라봉과 천혜향의 교배종인 황금향입니다. 껍질이 매끄럽고 과즙이 풍부하며 씨가 거의 없어 먹기 편합니다.',
   },
 
@@ -111,7 +111,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     price: 15000,
     category: '우도 땅콩',
     regesterDate: '2026-03-15',
-    imageUrl: '/mock/우도땅콩/1.png',
+    imageUrl: '/mock/우도땅콩/1.jpg',
     description: '우도 화산 모래밭에서 자란 땅콩을 직접 볶아 고소함이 진합니다. 맥주 안주로 최고입니다.',
   },
   {
@@ -125,7 +125,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 23000,
     category: '우도 땅콩',
     regesterDate: '2026-03-18',
-    imageUrl: '/mock/우도땅콩/2.png',
+    imageUrl: '/mock/우도땅콩/2.jpg',
     description: '우도산 땅콩으로 만든 수제 아이스크림 6개입 세트입니다. 진한 땅콩 풍미가 일품입니다.',
   },
   {
@@ -139,7 +139,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 20000,
     category: '우도 땅콩',
     regesterDate: '2026-03-27',
-    imageUrl: '/mock/우도땅콩/3.png',
+    imageUrl: '/mock/우도땅콩/3.jpg',
     description: '갓 수확한 우도 생땅콩입니다. 삶아서 드시면 부드럽고 고소한 맛을 즐길 수 있습니다.',
   },
   {
@@ -152,7 +152,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     price: 12000,
     category: '우도 땅콩',
     regesterDate: '2026-04-02',
-    imageUrl: '/mock/우도땅콩/4.png',
+    imageUrl: '/mock/우도땅콩/4.jpg',
     description: '우도산 땅콩 100%로 만든 무첨가 수제 땅콩버터입니다. 빵에 발라 드시면 고소함이 가득합니다.',
   },
 
@@ -167,7 +167,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     price: 25000,
     category: '고사리',
     regesterDate: '2026-03-10',
-    imageUrl: '/mock/고사리/1.png',
+    imageUrl: '/mock/고사리/1.jpg',
     description: '제주 오름에서 직접 채취한 고사리를 자연 건조한 프리미엄 건고사리입니다. 명절 나물에 필수입니다.',
   },
   {
@@ -181,7 +181,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 21000,
     category: '고사리',
     regesterDate: '2026-04-01',
-    imageUrl: '/mock/고사리/2.png',
+    imageUrl: '/mock/고사리/2.jpg',
     description: '봄철 제주 한라산 자락에서 갓 채취한 생고사리입니다. 데쳐서 나물로 무치면 향이 깊습니다.',
   },
   {
@@ -195,7 +195,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 15000,
     category: '고사리',
     regesterDate: '2026-03-29',
-    imageUrl: '/mock/고사리/3.png',
+    imageUrl: '/mock/고사리/3.jpg',
     description: '제주산 고사리와 한우 사골로 만든 육개장 밀키트 2인분입니다. 간편하게 제주의 맛을 즐기세요.',
   },
 
@@ -211,7 +211,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 20000,
     category: '구좌 당근',
     regesterDate: '2026-03-26',
-    imageUrl: '/mock/구좌당근/1.png',
+    imageUrl: '/mock/구좌당근/1.avif',
     description: '구좌읍 겨울 바닷바람 맞고 자란 유기농 당근입니다. 일반 당근보다 당도가 2배 이상 높아 주스용으로 인기가 많습니다.',
   },
   {
@@ -225,7 +225,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 27000,
     category: '구좌 당근',
     regesterDate: '2026-03-31',
-    imageUrl: '/mock/구좌당근/2.png',
+    imageUrl: '/mock/구좌당근/2.jpg',
     description: '구좌산 당근을 100% 착즙한 무첨가 당근 주스입니다. 하루 한 잔으로 건강을 챙기세요.',
   },
   {
@@ -239,7 +239,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 17000,
     category: '구좌 당근',
     regesterDate: '2026-04-02',
-    imageUrl: '/mock/구좌당근/3.png',
+    imageUrl: '/mock/구좌당근/3.jpg',
     description: '성산읍 화산토에서 자란 흙당근입니다. 모양은 고르지 않지만 맛과 영양은 최고입니다.',
   },
   {
@@ -252,7 +252,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     price: 9000,
     category: '구좌 당근',
     regesterDate: '2026-03-23',
-    imageUrl: '/mock/구좌당근/4.png',
+    imageUrl: '/mock/구좌당근/4.webp',
     description: '아이들 간식용으로 좋은 미니 당근입니다. 세척 후 바로 먹을 수 있어 편리합니다.',
   },
   {
@@ -266,7 +266,7 @@ export const MOCK_PRODUCTS: MockProduct[] = [
     originalPrice: 13500,
     category: '구좌 당근',
     regesterDate: '2026-04-03',
-    imageUrl: '/mock/구좌당근/5.png',
+    imageUrl: '/mock/구좌당근/5.jpg',
     description: '대정읍 해안가에서 월동 재배한 당근입니다. 추위를 이겨내 당도가 높고 아삭한 식감이 일품입니다.',
   },
 ];

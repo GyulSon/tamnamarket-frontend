@@ -137,6 +137,7 @@ export function BuyerHome() {
                 }}
               >
                 <ProductCard
+                  imageUrl={product.imageUrl}
                   title={product.title}
                   location={product.location}
                   name={product.farmerName}
@@ -160,8 +161,12 @@ export function BuyerHome() {
                 >
                   <HeartIcon
                     style={{
-                      color: likedProducts.has(product.id) ? '#FF761B' : undefined,
-                      fill: likedProducts.has(product.id) ? '#FF761B' : undefined,
+                      color: likedProducts.has(product.id)
+                        ? '#FF761B'
+                        : undefined,
+                      fill: likedProducts.has(product.id)
+                        ? '#FF761B'
+                        : undefined,
                     }}
                   />
                 </IconButton>
@@ -195,11 +200,13 @@ export function BuyerHome() {
             {MOCK_FARMERS.map((farmer) => (
               <FarmerCard
                 key={farmer.id}
+                imageUrl={farmer.profileUrls[0]}
                 name={farmer.name}
                 location={farmer.location}
                 description={farmer.description}
                 percent={farmer.percent}
                 totalSellCnt={farmer.totalSellCnt}
+                
               />
             ))}
           </VStack>

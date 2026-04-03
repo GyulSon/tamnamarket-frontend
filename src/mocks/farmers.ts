@@ -34,7 +34,7 @@ export const MOCK_FARMERS: MockFarmer[] = [
     description: '당근·고사리 복합영농 20년',
     percent: 85,
     totalSellCnt: 634,
-    profileUrls: ['/mock/인물/7.png', '/mock/인물/8.png', '/mock/인물/9.png'],
+    profileUrls: ['/mock/인물/7.jpg', '/mock/인물/8.jpg', '/mock/인물/9.jpg'],
   },
   {
     id: '4',
@@ -61,7 +61,7 @@ export const MOCK_FARMERS: MockFarmer[] = [
     description: '레드향 전문 재배 25년',
     percent: 88,
     totalSellCnt: 743,
-    profileUrls: ['/mock/인물/5.png', '/mock/인물/6.png', '/mock/인물/7.png'],
+    profileUrls: ['/mock/인물/5.png', '/mock/인물/6.png', '/mock/인물/7.jpg'],
   },
   {
     id: '7',
@@ -70,7 +70,7 @@ export const MOCK_FARMERS: MockFarmer[] = [
     description: '고사리 채취·건조 명인',
     percent: 83,
     totalSellCnt: 412,
-    profileUrls: ['/mock/인물/6.png', '/mock/인물/7.png', '/mock/인물/8.png'],
+    profileUrls: ['/mock/인물/6.png', '/mock/인물/7.jpg', '/mock/인물/8.jpg'],
   },
   {
     id: '8',
@@ -79,7 +79,7 @@ export const MOCK_FARMERS: MockFarmer[] = [
     description: '감귤·당근 복합영농, 청년 농부',
     percent: 79,
     totalSellCnt: 298,
-    profileUrls: ['/mock/인물/8.png', '/mock/인물/9.png', '/mock/인물/1.png'],
+    profileUrls: ['/mock/인물/8.jpg', '/mock/인물/9.jpg', '/mock/인물/1.png'],
   },
   {
     id: '9',
@@ -88,6 +88,6 @@ export const MOCK_FARMERS: MockFarmer[] = [
     description: '친환경 우도 땅콩 가공 전문',
     percent: 90,
     totalSellCnt: 967,
-    profileUrls: ['/mock/인물/9.png', '/mock/인물/1.png', '/mock/인물/2.png'],
+    profileUrls: ['/mock/인물/9.jpg', '/mock/인물/1.png', '/mock/인물/2.png'],
   },
 ];

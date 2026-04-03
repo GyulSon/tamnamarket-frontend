@@ -32,7 +32,7 @@ export function FarmerCard({
 }: FarmerCardProps) {
   const router = useRouter();
   const handleClick = () => {
-    router.push('/buyer/farmer/1');
+    router.push(`/buyer/farmer/1`);
   };
   return (
     <HStack
